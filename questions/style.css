@@ -97,3 +97,31 @@
 	bottom: 10px;
 }
 
+.question-counter {
+	margin-top:0.25em;
+}
+
+.icon-stack {
+	display:grid;
+	grid-template-rows: 1;
+	grid-template-columns: 1;
+	align-items:stretch;
+	justify-items:center;
+}
+
+.icon-stack > * {
+	grid-row: 1;
+	grid-column: 1;
+}
+
+.icon-stack-1x {
+	line-height:inherit;
+}
+
+.icon-stack-2x {
+	font-size:2em;
+}
+
+.icon-inverse {
+	color:#fff;
+}

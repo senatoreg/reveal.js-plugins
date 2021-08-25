@@ -195,7 +195,7 @@ console.log("Wait for pdf pages to be created and drawings to be loaded");
 		button.style.top = toggleChalkboardButton.top ||  "auto";
 		button.style.right = toggleChalkboardButton.right ||  "auto";
 
-		button.innerHTML = '<a href="#" title="Toggle chalkboard ('+keyBindings.toggleChalkboard.key+')" onclick="RevealChalkboard.toggleChalkboard(); return false;"><i class="fa fa-pen-square"></i></a>'
+		button.innerHTML = '<a href="#" title="Toggle chalkboard ('+keyBindings.toggleChalkboard.key+')" onclick="RevealChalkboard.toggleChalkboard(); return false;"><i class="mdi mdi-pencil-box"></i></a>'
 		document.querySelector(".reveal").appendChild( button );
 	}
 	if ( toggleNotesButton ) {
@@ -212,7 +212,7 @@ console.log("Wait for pdf pages to be created and drawings to be loaded");
 		button.style.top = toggleNotesButton.top ||  "auto";
 		button.style.right = toggleNotesButton.right ||  "auto";
 
-		button.innerHTML = '<a href="#" title="Toggle slide annotation ('+keyBindings.toggleNotesCanvas.key+')" onclick="RevealChalkboard.toggleNotesCanvas(); return false;"><i class="fa fa-pen"></i></a>'
+		button.innerHTML = '<a href="#" title="Toggle slide annotation ('+keyBindings.toggleNotesCanvas.key+')" onclick="RevealChalkboard.toggleNotesCanvas(); return false;"><i class="mdi mdi-pencil"></i></a>'
 		document.querySelector(".reveal").appendChild( button );
 	}
 //alert("Buttons");
@@ -248,7 +248,7 @@ console.log("Wait for pdf pages to be created and drawings to be loaded");
 		for (var i = 0; i < length; i++ ) {
 			var colorButton = document.createElement( 'li' );
 			colorButton.setAttribute("data-color",i);
-			colorButton.innerHTML = '<i class="fa fa-square"></i>';
+			colorButton.innerHTML = '<i class="mdi mdi-square-rounded"></i>';
 			colorButton.style.color = colors[i].color;
 			colorButton.addEventListener("click", function(e) {
 				var element = e.target;
@@ -312,7 +312,7 @@ console.log("Wait for pdf pages to be created and drawings to be loaded");
 			if ( boardHandle ) {
 				var handle = document.createElement( 'div' );
 				handle.classList.add('boardhandle');
-				handle.innerHTML='<ul><li><a id="previousboard" href="#" title="Previous board"><i class="fas fa-chevron-up"></i></a></li><li><a id="nextboard" href="#" title="Next board"><i class="fas fa-chevron-down"></i></a></li></ul>';
+				handle.innerHTML='<ul><li><a id="previousboard" href="#" title="Previous board"><i class="mdi mdi-chevron-up"></i></a></li><li><a id="nextboard" href="#" title="Next board"><i class="mdi mdi-chevron-down"></i></a></li></ul>';
 				handle.querySelector("#previousboard").addEventListener("click", function(e) {
 					e.preventDefault();
 					setBoard(board-1,true);

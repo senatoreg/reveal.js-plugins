@@ -43,10 +43,10 @@ const initQnA = function(Reveal){
 	questionTemplate.classList.add("question");
 	questionTemplate.innerHTML = 	'<div class="user">Anonymous</div>' +
 				'<div class="text">Text</div>' +
-				'<div class="votes"><span>-1</span> <i class="fa fa-thumbs-up"></i></div>' +
-				'<div class="close"><i class="fa fa-check"></i></div>';
+				'<div class="votes"><span>-1</span> <i class="mdi mdi-thumb-up"></i></div>' +
+				'<div class="close"><i class="mdi mdi-check-bold"></i></div>';
 
-	container.innerHTML = '<div class="qna ask"><input type="text" placeholder="Enter question" required="" autocomplete="off"></input><button>Ask <i class="fa fa-paper-plane"></button></div>';
+	container.innerHTML = '<div class="qna ask"><input type="text" placeholder="Enter question" required="" autocomplete="off"></input><button>Ask <i class="mdi mdi-send"></button></div>';
 
 	container.querySelector("input").addEventListener('keypress', function( e ) {
 		e.stopPropagation(); // consume all key presses and do not allow other to listen to them
@@ -88,8 +88,8 @@ const initQnA = function(Reveal){
 		button.style.right = toggleQnAButton.right ||  "auto";
 
 		button.innerHTML = '<a href="#" title="Toggle Q&A dashboard (Q)" onclick="RevealQnA.toggleQnA(); return false;">' +
-				'<span class="fa-stack" style="margin: -10px;"><span class="fa fa-comment fa-stack-1x"></span><strong class="fa-stack-1x fa-inverse qna question-counter" style="font-size:0.5em;"></strong></span>' +
-//<i class="fa fa-comment"></i>
+				'<span class="icon-stack"><span class="mdi mdi-comment icon-stack-1x"></span><strong class="icon-stack-1x icon-inverse qna question-counter" style="font-size:0.5em;"></strong></span>' +
+//<i class="mdi mdi-comment"></i>
 				'</a>';
 		document.querySelector(".reveal").appendChild( button );
 	}
