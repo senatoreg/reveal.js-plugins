@@ -404,6 +404,7 @@ console.log(rooms);
 	this.close_room = close_room;
 	this.connected = connected;
 	this.hosting = hosting;
+	this.get_username = get_username;
 
 	return this;
 };
