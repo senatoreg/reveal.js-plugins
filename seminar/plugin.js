@@ -26,6 +26,7 @@ window.RevealSeminar = window.RevealSeminar || {
     close_room: function( secret ) { close_room( secret ); },
     connected: function() { return connected(); },
     hosting: function() { return hosting(); },
+    get_username: function() { return get_username(); },
 };
 
 function defaultLogger( event ) {
@@ -76,6 +77,10 @@ const initSeminar = function(Reveal){
 		var event = new CustomEvent('seminar');
 		event.status = status;
 		document.dispatchEvent( event );
+	}
+
+	function get_username() {
+		return username;
 	}
 
 	function checkin( name ) {
@@ -399,6 +404,7 @@ console.log(rooms);
 	this.close_room = close_room;
 	this.connected = connected;
 	this.hosting = hosting;
+	this.get_username = get_username;
 
 	return this;
 };
