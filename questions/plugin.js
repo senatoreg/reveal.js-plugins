@@ -118,7 +118,7 @@ const initQnA = function(Reveal){
 	function ask( text ) {
 		// ask a question
 		var message = new CustomEvent('send');
-		message.content = { sender: 'questions-plugin', recipient: true, type: 'ask', text, username: 'Anonymous' };
+		message.content = { sender: 'questions-plugin', recipient: true, type: 'ask', text, username: ( RevealSeminar.get_username() ? RevealSeminar.get_username() : 'Anonymous' ) };
 		document.dispatchEvent( message );
 	}
 
