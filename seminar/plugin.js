@@ -51,7 +51,7 @@ const initSeminar = function(Reveal){
 
 	const logger = seminar.logger || defaultLogger;
 
-	var socket = io.connect( seminar.server, { path: seminar.server_path } );
+	var socket = io( seminar.server, { path: seminar.server_path } );
 	if ( seminar.callback )
 	logger('connect to ', seminar.server);
 	socket.on('connect', function() {
