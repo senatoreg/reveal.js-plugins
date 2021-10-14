@@ -123,7 +123,6 @@ const initSeminar = function(Reveal){
 		}
 	});
 
->>>>>>> upstream/master
 	function checkin( name ) {
 		if ( status && name && username != name ) {
 			// check out if user name changed
