@@ -54,6 +54,7 @@ const initCustomControls = function(Reveal){
 	div.appendChild( controls );
 
 
+	document.querySelectorAll(".reveal > div#customcontrols").forEach(el => { el.remove(); });
 	document.querySelector(".reveal").appendChild( div );
 
 	document.addEventListener( 'resize', function( event ) {
