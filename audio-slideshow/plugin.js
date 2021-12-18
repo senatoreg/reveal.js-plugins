@@ -32,6 +32,7 @@ const initAudioSlideshow = function(Reveal){
 	var defaultDuration = 5; // value in seconds
 	var defaultAudios = true; // try to obtain audio for slide and fragment numbers
 	var advance = 0; // advance to next slide after given time in milliseconds after audio has played, use negative value to not advance
+	var delay = 0; // start next slide after given time in milliseconds before audio has played, use negative value to not advance
 	var autoplay = false; // automatically start slideshow
 	var playerOpacity = .05; // opacity when the mouse is far from to the audioplayer
 	var startAtFragment = false; // when moving to a slide, start at the current fragment or at the start of the slide
@@ -118,7 +119,14 @@ const initAudioSlideshow = function(Reveal){
 					currentAudio.volume = previousAudio.volume;
 					currentAudio.muted = previousAudio.muted;
 //console.debug( "Play " + currentAudio.id);
-					currentAudio.play();
+				        if ( delay > 0 ) {
+					    timer = setTimeout( function() {
+					        currentAudio.play();
+						timer = null;
+					    }, delay );
+				        } else {
+					    currentAudio.play();
+                                        }
 				}
 			}
 			else if ( autoplay ) {
@@ -150,6 +158,7 @@ const initAudioSlideshow = function(Reveal){
 			if ( config.defaultDuration != null ) defaultDuration = config.defaultDuration;
 			if ( config.defaultAudios != null ) defaultAudios = config.defaultAudios;
 			if ( config.advance != null ) advance = config.advance;
+			if ( config.delay != null ) delay = config.delay;
 			if ( config.autoplay != null ) autoplay = config.autoplay;
 			if ( config.playerOpacity != null  ) playerOpacity = config.playerOpacity;
 			if ( config.playerStyle != null ) playerStyle = config.playerStyle;
