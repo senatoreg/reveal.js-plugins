@@ -121,14 +121,14 @@ const initAudioSlideshow = function(Reveal){
 					currentAudio.volume = previousAudio.volume;
 					currentAudio.muted = previousAudio.muted;
 //console.debug( "Play " + currentAudio.id);
-				        if ( delay > 0 ) {
-					    timer = setTimeout( function() {
-					        currentAudio.play();
-						timer = null;
-					    }, delay );
-				        } else {
-					    currentAudio.play();
-                                        }
+					if ( delay > 0 ) {
+						timer = setTimeout( function() {
+							currentAudio.play();
+							timer = null;
+						}, delay );
+					} else {
+						currentAudio.play();
+					}
 				}
 			}
 			else if ( autoplay ) {
