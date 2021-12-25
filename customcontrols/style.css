@@ -68,3 +68,12 @@
 	}
 }
 
+#customcontrols > ul > li > button > i.lite,
+#customcontrols > ul > li > button > span.icon-stack > span.lite {
+    opacity: 0.1;
+}
+
+#customcontrols > ul > li > button > i.lite:hover,
+#customcontrols > ul > li > button > span.icon-stack > span.lite:hover {
+    opacity: 1.0;
+}
