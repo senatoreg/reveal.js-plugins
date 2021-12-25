@@ -122,14 +122,14 @@ const initAudioSlideshow = function(Reveal){
 					currentAudio.muted = previousAudio.muted;
 				}
 //console.debug( "Play " + currentAudio.id);
-					if ( delay > 0 ) {
-						timer = setTimeout( function() {
-							timer = null;
-							currentAudio.play();
-						}, delay );
-					} else {
+				if ( delay > 0 ) {
+					timer = setTimeout( function() {
+						timer = null;
 						currentAudio.play();
-					}
+					}, delay );
+				} else {
+					currentAudio.play();
+				}
 			}
 			else if ( autoplay ) {
 				currentAudio.play();
@@ -394,7 +394,7 @@ const initAudioSlideshow = function(Reveal){
 			evt.timestamp = 1000 * audioElement.currentTime;
 			document.dispatchEvent( evt );
 
-			if ( timer ) { clearTimeout( timer ); timer = null; }
+			//if ( timer ) { clearTimeout( timer ); timer = null; }
 			// preload next audio element so that it is available after slide change
 			var indices = Reveal.getIndices();
 			var nextId = "audioplayer-" + indices.h + '.' + indices.v;
@@ -419,14 +419,14 @@ const initAudioSlideshow = function(Reveal){
 			}
 		} );
 		audioElement.addEventListener( 'pause', function( event ) {
-			if ( timer ) { clearTimeout( timer ); timer = null; }
+			//if ( timer ) { clearTimeout( timer ); timer = null; }
 			document.dispatchEvent( new CustomEvent('stopplayback') );
 		} );
 		audioElement.addEventListener( 'seeked', function( event ) {
 			var evt = new CustomEvent('seekplayback');
 			evt.timestamp = 1000 * audioElement.currentTime;
 			document.dispatchEvent( evt );
-			if ( timer ) { clearTimeout( timer ); timer = null; }
+			//if ( timer ) { clearTimeout( timer ); timer = null; }
 		} );
 
 		if ( audioFile != null ) {
