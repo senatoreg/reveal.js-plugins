@@ -103,8 +103,10 @@ const initAudioSlideshow = function(Reveal){
 		}
 	} );
 
-	function selectAudio( previousAudio ) {
+	function selectAudio() {
+		var previousAudio;
 		if ( currentAudio ) {
+			previousAudio = currentAudio;
 			currentAudio.pause();
 			currentAudio.style.display = "none";
 		}
@@ -373,15 +375,15 @@ const initAudioSlideshow = function(Reveal){
 				}
 				// advance immediately or set a timer - or do nothing
 				if ( advance == "true" || advanceNow == 0 ) {
-					var previousAudio = currentAudio;
+					//var previousAudio = currentAudio;
 					Reveal.next();
-					selectAudio( previousAudio );
+					//selectAudio( previousAudio );
 				}
 				else if ( advanceNow > 0 ) {
 					timer = setTimeout( function() {
-						var previousAudio = currentAudio;
+						//var previousAudio = currentAudio;
 						Reveal.next();
-						selectAudio( previousAudio );
+						//selectAudio( previousAudio );
 						timer = null;
 					}, advanceNow );
 				}
