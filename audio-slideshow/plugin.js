@@ -104,32 +104,33 @@ const initAudioSlideshow = function(Reveal){
 	} );
 
 	function selectAudio() {
-		var previousAudio;
-		if ( currentAudio ) {
-			previousAudio = currentAudio;
-			currentAudio.pause();
-			currentAudio.style.display = "none";
+		//var previousAudio;
+		previousAudio = currentAudio;
+		if ( previousAudio ) {
+			previousAudio.pause();
+			previousAudio.style.display = "none";
 		}
 		var indices = Reveal.getIndices();
 		var id = "audioplayer-" + indices.h + '.' + indices.v;
 		if ( indices.f != undefined && indices.f >= 0 ) id = id + '.' + indices.f;
 		currentAudio = document.getElementById( id );
+console.log( "Play ", previousAudio, currentAudio);
 		if ( currentAudio ) {
 			currentAudio.style.display = "block";
 			if ( previousAudio ) {
 				if ( currentAudio.id != previousAudio.id ) {
 					currentAudio.volume = previousAudio.volume;
 					currentAudio.muted = previousAudio.muted;
+				}
 //console.debug( "Play " + currentAudio.id);
 					if ( delay > 0 ) {
 						timer = setTimeout( function() {
-							currentAudio.play();
 							timer = null;
+							currentAudio.play();
 						}, delay );
 					} else {
 						currentAudio.play();
 					}
-				}
 			}
 			else if ( autoplay ) {
 				currentAudio.play();
@@ -381,10 +382,10 @@ const initAudioSlideshow = function(Reveal){
 				}
 				else if ( advanceNow > 0 ) {
 					timer = setTimeout( function() {
+						timer = null;
 						//var previousAudio = currentAudio;
 						Reveal.next();
 						//selectAudio( previousAudio );
-						timer = null;
 					}, advanceNow );
 				}
 			}
