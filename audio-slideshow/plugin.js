@@ -167,7 +167,7 @@ const initAudioSlideshow = function(Reveal){
 		if ( 'ontouchstart' in window || navigator.msMaxTouchPoints ) {
 			opacity = 1;
 		}
-		if ( Reveal.getConfig().audioStartAtFragment ) startAtFragment = Reveal.getConfig().audioStartAtFragment;
+		if ( Reveal.getConfig().audioStartAtFragment ) startAtFragment = Reveal.getConfig().audio.startAtFragment;
 
 		// set style so that audio controls are shown on hover
 		var css='.audio-controls>audio { opacity:' + playerOpacity + ';} .audio-controls:hover>audio { opacity:1;}';
