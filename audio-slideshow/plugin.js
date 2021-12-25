@@ -114,7 +114,6 @@ const initAudioSlideshow = function(Reveal){
 		var id = "audioplayer-" + indices.h + '.' + indices.v;
 		if ( indices.f != undefined && indices.f >= 0 ) id = id + '.' + indices.f;
 		currentAudio = document.getElementById( id );
-console.log( "Play ", previousAudio, currentAudio);
 		if ( currentAudio ) {
 			currentAudio.style.display = "block";
 			if ( previousAudio ) {
