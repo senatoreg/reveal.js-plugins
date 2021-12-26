@@ -43,6 +43,7 @@ const initAudioSlideshow = function(Reveal){
 	var currentAudio = null;
 	var previousAudio = null;
 	var timer = null;
+	var advanced = false; // automatically start next slide
 
 	Reveal.addEventListener( 'fragmentshown', function( event ) {
 		if ( timer ) { clearTimeout( timer ); timer = null; }
@@ -116,12 +117,13 @@ const initAudioSlideshow = function(Reveal){
 		currentAudio = document.getElementById( id );
 		if ( currentAudio ) {
 			currentAudio.style.display = "block";
-			if ( previousAudio ) {
-				if ( currentAudio.id != previousAudio.id ) {
-					currentAudio.volume = previousAudio.volume;
-					currentAudio.muted = previousAudio.muted;
-				}
+			if ( previousAudio && currentAudio.id != previousAudio.id ) {
+				currentAudio.volume = previousAudio.volume;
+				currentAudio.muted = previousAudio.muted;
+			}
 //console.debug( "Play " + currentAudio.id);
+			if ( advanced ) {
+				advanced = false;
 				if ( delay > 0 ) {
 					timer = setTimeout( function() {
 						timer = null;
@@ -376,6 +378,7 @@ const initAudioSlideshow = function(Reveal){
 				// advance immediately or set a timer - or do nothing
 				if ( advance == "true" || advanceNow == 0 ) {
 					//var previousAudio = currentAudio;
+					advanced = true;
 					Reveal.next();
 					//selectAudio( previousAudio );
 				}
@@ -383,6 +386,7 @@ const initAudioSlideshow = function(Reveal){
 					timer = setTimeout( function() {
 						timer = null;
 						//var previousAudio = currentAudio;
+						advanced = true;
 						Reveal.next();
 						//selectAudio( previousAudio );
 					}, advanceNow );
