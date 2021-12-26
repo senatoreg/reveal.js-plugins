@@ -122,7 +122,7 @@ const initAudioSlideshow = function(Reveal){
 				currentAudio.muted = previousAudio.muted;
 			}
 //console.debug( "Play " + currentAudio.id);
-			if ( advanced ) {
+			if ( advanced || autoplay ) {
 				advanced = false;
 				if ( delay > 0 ) {
 					timer = setTimeout( function() {
@@ -132,9 +132,6 @@ const initAudioSlideshow = function(Reveal){
 				} else {
 					currentAudio.play();
 				}
-			}
-			else if ( autoplay ) {
-				currentAudio.play();
 			}
 
 		}
