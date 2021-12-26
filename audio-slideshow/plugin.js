@@ -112,18 +112,16 @@ const initAudioSlideshow = function(Reveal){
 		}
 		var indices = Reveal.getIndices();
 		var id = "audioplayer-" + indices.h + '.' + indices.v;
-		if ( indices.f != undefined && indices.f >= 0 ) id = id + '.' + indices.f;
-		var tmp = currentAudio;
+		if ( indices.f != undefined && indices.f > -1 ) id = id + '.' + indices.f;
+		previousAudio = currentAudio;
 		currentAudio = document.getElementById( id );
-		if ( tmp && tmp.id === currentAudio.id )
-			return;
-		previousAudio = tmp;
 		if ( currentAudio ) {
 			currentAudio.style.display = "block";
 			if ( previousAudio ) {
 				currentAudio.volume = previousAudio.volume;
 				currentAudio.muted = previousAudio.muted;
 				currentAudio.playbackRate = previousAudio.playbackRate;
+				previousAudio.load();
 			}
 //console.debug( "Play " + currentAudio.id);
 			if ( advanced || autoplay ) {
