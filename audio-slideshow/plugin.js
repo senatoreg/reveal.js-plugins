@@ -401,22 +401,15 @@ const initAudioSlideshow = function(Reveal){
 			//if ( timer ) { clearTimeout( timer ); timer = null; }
 			// preload next audio element so that it is available after slide change
 			var indices = Reveal.getIndices();
-			var nextId = "audioplayer-" + indices.h + '.' + indices.v;
-			if ( indices.f != undefined && indices.f >= 0 ) {
-				nextId = nextId + '.' + (indices.f + 1);
-			}
-			else {
-				nextId = nextId + '.0';
-			}
-			var nextAudio = document.getElementById( nextId );
-			if ( !nextAudio ) {
+			if ( Reveal.availableFragments().next )
+				nextId = "audioplayer-" + indices.h + '.' + indices.v + '.' + (indices.f + 1);
+			else if ( Reveal.isVerticalSlide() && !Reveal.isLastVerticalSlide() )
 				nextId = "audioplayer-" + indices.h + '.' + (indices.v+1);
-				nextAudio = document.getElementById( nextId );
-				if ( !nextAudio ) {
-					nextId = "audioplayer-" + (indices.h+1) + '.0';
-					nextAudio = document.getElementById( nextId );
-				}
-			}
+			else
+				nextId = "audioplayer-" + (indices.h+1) + '.0';
+
+			var nextAudio = document.getElementById( nextId );
+
 			if ( nextAudio ) {
 //console.debug( "Preload: " + nextAudio.id );
 				nextAudio.load();
