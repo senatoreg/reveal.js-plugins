@@ -123,6 +123,7 @@ const initAudioSlideshow = function(Reveal){
 			if ( previousAudio ) {
 				currentAudio.volume = previousAudio.volume;
 				currentAudio.muted = previousAudio.muted;
+				currentAudio.playbackRate = previousAudio.playbackRate;
 			}
 //console.debug( "Play " + currentAudio.id);
 			if ( advanced || autoplay ) {
