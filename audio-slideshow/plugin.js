@@ -376,18 +376,14 @@ const initAudioSlideshow = function(Reveal){
 				}
 				// advance immediately or set a timer - or do nothing
 				if ( advance == "true" || advanceNow == 0 ) {
-					//var previousAudio = currentAudio;
 					advanced = true;
 					Reveal.next();
-					//selectAudio( previousAudio );
 				}
 				else if ( advanceNow > 0 ) {
 					timer = setTimeout( function() {
 						timer = null;
-						//var previousAudio = currentAudio;
 						advanced = true;
 						Reveal.next();
-						//selectAudio( previousAudio );
 					}, advanceNow );
 				}
 			}
@@ -397,7 +393,6 @@ const initAudioSlideshow = function(Reveal){
 			evt.timestamp = 1000 * audioElement.currentTime;
 			document.dispatchEvent( evt );
 
-			//if ( timer ) { clearTimeout( timer ); timer = null; }
 			// preload next audio element so that it is available after slide change
 			var indices = Reveal.getIndices();
 			if ( Reveal.availableFragments().next )
@@ -415,14 +410,12 @@ const initAudioSlideshow = function(Reveal){
 			}
 		} );
 		audioElement.addEventListener( 'pause', function( event ) {
-			//if ( timer ) { clearTimeout( timer ); timer = null; }
 			document.dispatchEvent( new CustomEvent('stopplayback') );
 		} );
 		audioElement.addEventListener( 'seeked', function( event ) {
 			var evt = new CustomEvent('seekplayback');
 			evt.timestamp = 1000 * audioElement.currentTime;
 			document.dispatchEvent( evt );
-			//if ( timer ) { clearTimeout( timer ); timer = null; }
 		} );
 
 		if ( audioFile != null ) {
