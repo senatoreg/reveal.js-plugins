@@ -428,7 +428,6 @@ const initAudioSlideshow = function(Reveal){
 			} );
 		}
 		else if ( defaultAudios ) {
-			var audioExists = false;
 			try {
 				// check if audio file exists
 				var xhr = new XMLHttpRequest();
@@ -438,7 +437,6 @@ const initAudioSlideshow = function(Reveal){
 						var audioSource = document.createElement( 'source' );
 						audioSource.src = prefix + indices + suffix;
 						audioElement.insertBefore(audioSource, audioElement.firstChild);
-						audioExists = true;
 					}
 					else {
 						setupFallbackAudio( audioElement, text, videoElement );
@@ -446,7 +444,6 @@ const initAudioSlideshow = function(Reveal){
 				}
 				xhr.send(null);
 			} catch( error ) {
-//console.log("Error checking audio" + audioExists);
 				// fallback if checking of audio file fails (e.g. when running the slideshow locally)
 				var audioSource = document.createElement( 'source' );
 				audioSource.src = prefix + indices + suffix;
