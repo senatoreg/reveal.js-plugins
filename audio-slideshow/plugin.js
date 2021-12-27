@@ -121,7 +121,6 @@ const initAudioSlideshow = function(Reveal){
 				currentAudio.volume = previousAudio.volume;
 				currentAudio.muted = previousAudio.muted;
 				currentAudio.playbackRate = previousAudio.playbackRate;
-				previousAudio.load();
 			}
 //console.debug( "Play " + currentAudio.id);
 			if ( advanced || autoplay ) {
@@ -393,6 +392,7 @@ const initAudioSlideshow = function(Reveal){
 			evt.timestamp = 1000 * audioElement.currentTime;
 			document.dispatchEvent( evt );
 
+/*
 			// preload next audio element so that it is available after slide change
 			var indices = Reveal.getIndices();
 			if ( Reveal.availableFragments().next )
@@ -408,6 +408,7 @@ const initAudioSlideshow = function(Reveal){
 //console.debug( "Preload: " + nextAudio.id );
 				nextAudio.load();
 			}
+*/
 		} );
 		audioElement.addEventListener( 'pause', function( event ) {
 			document.dispatchEvent( new CustomEvent('stopplayback') );
