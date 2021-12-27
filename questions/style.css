@@ -16,7 +16,7 @@
 	padding: 10px;
 	height: 30px;
 	border-radius: 0;
-	width: calc(100% - 240px);
+	width: calc(100% - 250px);
 }
 
 .qna.ask button  
@@ -30,7 +30,7 @@
 	border-radius: 0px;
 	background-color: var(--r-link-color);
 	color: var(--r-background-color);
-	width: 120px;
+	width: 125px;
 }
 
 .qna.ask button:hover  
