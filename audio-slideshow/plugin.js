@@ -104,6 +104,11 @@ const initAudioSlideshow = function(Reveal){
 		}
 	} );
 
+	Reveal.addKeyBinding( { keyCode: 85, key: 'U', description: 'Toggle auto play audio' }, function() {
+		if ( timer ) { clearTimeout( timer ); timer = null; }
+		autoplay = !autoplay!
+	} );
+
 	function selectAudio() {
 		//var previousAudio;
 		if ( currentAudio ) {
