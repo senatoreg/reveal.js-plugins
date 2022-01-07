@@ -23,6 +23,7 @@ const initCustomControls = function(Reveal){
 	var tooltip = config.tooltip || 'Show/hide controls';
 	var collapse = config.collapse || false;
 	var collapsed = config.collapse || false;
+	const maxHeight = Math.min( (24 + 2 * 10) * config.controls.length, Reveal.gtConfig().height * 0.5 ) + 'px';
 
 	var div = document.createElement( 'div' );
 	div.id = 'customcontrols';
@@ -34,14 +35,13 @@ const initCustomControls = function(Reveal){
 		toggleButton.classList.add('show');
 	 else
 		toggleButton.classList.add('hide');
-	//toggleButton.innerHTML = '<span id="collapse-customcontrols">' + collapseIcon + '</span>' + '<span id="expand-customcontrols">' + expandIcon + '</span>';
 	toggleButton.innerHTML = '<span id="collapse-customcontrols">' + expandIcon + '</span>';
 
 	toggleButton.addEventListener('click', function( event ) {
 		var div = document.querySelector("div#customcontrols > div.customcontrols.container.collapsed");
 		if ( div ) {
 			if ( collapsed ) {
-				div.style.maxHeight = 34 * config.controls.length + 'px';
+				div.style.maxHeight = maxHeight;
 				this.innerHTML = '<span id="collapse-customcontrols">' + collapseIcon + '</span>';
 				collapsed = !collapsed;
 			} else {

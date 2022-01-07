@@ -29,7 +29,7 @@
 	justify-content: flex-start;
 	align-items: center;
 	align-content: center;
-        gap: 5px 5px;
+        gap: 10px 5px;
 	position: fixed; 
 	left: 54px; 
 	bottom: 64px;
@@ -40,15 +40,13 @@
 	border: 1px solid var(--r-link-color);
 	border-radius: 5px;
 	padding: 10px;
- */
-/*
 	background-color: var(--r-background-color);
  */
 }
 
 #customcontrols > div.customcontrols.container.collapsed {
 	flex-direction: column;
-	flex-wrap: nowrap;
+	flex-wrap: wrap;
 	justify-content: flex-start;
 	align-items: flex-start;
 	align-content: flex-end;
