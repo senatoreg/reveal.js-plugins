@@ -1,0 +1,86 @@
+#customcontrols {
+	z-index: 40;
+	position: fixed; 
+	left: 70px; 
+	bottom: 30px;
+	text-align: center;
+	font-size: 24px;
+}
+
+#customcontrols button {
+	background: none;
+	color: var(--r-link-color);
+	border: none;
+	padding: 0;
+	font: inherit;
+	cursor: pointer;
+	outline: inherit;
+	z-index: 40;
+}
+
+#customcontrols button:hover {
+	color: var(--r-link-color-hover);
+}
+
+#customcontrols > div.customcontrols.container {
+	display: inline-flex;
+	flex-direction: row;
+	flex-wrap: nowrap;
+	justify-content: flex-start;
+	align-items: center;
+	align-content: center;
+        gap: 5px 5px;
+	position: fixed; 
+	left: 54px; 
+	bottom: 64px;
+	list-style-type: none;
+	overflow: hidden;
+	margin: 0;
+/*
+	border: 1px solid var(--r-link-color);
+	border-radius: 5px;
+	padding: 10px;
+ */
+/*
+	background-color: var(--r-background-color);
+ */
+}
+
+#customcontrols > div.customcontrols.container.collapsed {
+	flex-direction: column;
+	flex-wrap: nowrap;
+	justify-content: flex-start;
+	align-items: flex-start;
+	align-content: flex-end;
+	transition: max-height 0.5s ease-in-out;
+}
+
+#customcontrols div.customcontrols.container > div.customcontrol {
+	margin: 0px 5px;
+	padding: 0px 5px;
+	float: left;
+}
+
+#customcontrols > #collapse.hide  {
+	display: none;
+} 
+
+#customcontrols > #collapse.show  {
+	display: block;
+} 
+
+@media print {
+	#customcontrols {
+		display: none!important; 
+	}
+}
+
+#customcontrols div.customcontrols.container > div.customcontrol  > button > i.lite,
+#customcontrols div.customcontrols.container > div.customcontrol  > button > span.icon-stack > span.lite {
+    opacity: 0.1;
+}
+
+#customcontrols div.customcontrols.container > div.customcontrol  > button > i.lite:hover,
+#customcontrols div.customcontrols.container > div.customcontrol  > button > span.icon-stack > span.lite:hover {
+    opacity: 1.0;
+}
