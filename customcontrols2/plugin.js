@@ -23,7 +23,7 @@ const initCustomControls = function(Reveal){
 	var tooltip = config.tooltip || 'Show/hide controls';
 	var collapse = config.collapse || false;
 	var collapsed = config.collapse || false;
-	const maxHeight = Math.min( (24 + 2 * 10) * config.controls.length, Reveal.getConfig().height * 0.5 ) + 'px';
+	const maxHeight = (24 + 2 * 10) * config.controls.length + 'px';
 
 	var div = document.createElement( 'div' );
 	div.id = 'customcontrols';

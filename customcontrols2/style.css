@@ -46,7 +46,7 @@
 
 #customcontrols > div.customcontrols.container.collapsed {
 	flex-direction: column;
-	flex-wrap: wrap;
+	flex-wrap: nowrap;
 	justify-content: flex-start;
 	align-items: flex-start;
 	align-content: flex-end;
