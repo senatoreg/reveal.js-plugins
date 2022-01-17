@@ -71,7 +71,6 @@ const initCustomControls = function(Reveal){
 		control.innerHTML = '<button ' + ( config.controls[i].title ? 'title="' + config.controls[i].title + '" ': '' ) + 'onclick="' + config.controls[i].action + '">' + config.controls[i].icon + '</button>';
 		controls.appendChild( control );
 	}
-	console.log("CC2", controls.offsetHeight);
 	controls.style.setProperty("--controls-width", "none");
 	controls.style.setProperty("--controls-height", 24 * config.controls.length);
 	div.appendChild( controls );
