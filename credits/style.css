@@ -1,0 +1,39 @@
+div#credits {
+    position: absolute; 
+    top: 0;
+    left: 0;
+    margin: 0;
+    width: 100%;
+    height: 100%;
+}
+
+div#credits div#credit.credit p {
+    margin: 0;
+}
+
+div#credits div#credit.credit > p:before {
+    content: var(--r-credits-prefix, "Source:");
+    margin-right: 0.33em;
+}
+
+div#credits div#credit.credit {
+    display: flex;
+    position: relative;
+    top: 50%;
+    right: 0px;
+    transform-origin: center bottom;
+    transform: translateX(47.5%) rotate(-90deg);
+    font-size: 0.5em;
+    color: var(--r-background-color);
+    filter: invert(0.75);
+    opacity: 0.5;
+    margin: 0;
+    justify-content: center;
+    align-items: center;
+    gap: 0.25em;
+}
+
+section.has-dark-background .info.credit, section.has-light-background .info.credit {
+    color: inherit;
+    filter: invert(0.2);
+}
