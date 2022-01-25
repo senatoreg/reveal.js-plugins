@@ -1,10 +1,9 @@
 div#credits {
+    display: block;
     position: absolute; 
-    top: 0;
-    left: 0;
+    top: 50%;
+    right: 0;
     margin: 0;
-    width: 100%;
-    height: 100%;
 }
 
 div#credits div#credit.credit p {
@@ -31,10 +30,12 @@ div#credits div#credit.credit {
     justify-content: center;
     align-items: center;
     gap: 0.25em;
-    z-index: 40;
+    z-index: 2;
 }
 
-section.has-dark-background .info.credit, section.has-light-background .info.credit {
+/*
+section.has-dark-background div#credits div#credit.credit {
     color: inherit;
     filter: invert(0.2);
 }
+*/
