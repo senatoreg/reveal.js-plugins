@@ -31,6 +31,7 @@ div#credits div#credit.credit {
     justify-content: center;
     align-items: center;
     gap: 0.25em;
+    z-index: 40;
 }
 
 section.has-dark-background .info.credit, section.has-light-background .info.credit {
