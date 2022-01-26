@@ -2,19 +2,28 @@ div#credits {
     display: block;
     position: absolute; 
     top: 50%;
-    right: 0;
+    right: var(--r-credits-margin, 1%);
+    transform-origin: center bottom;
+    transform: translateX(50%) rotate(-90deg);
+    font-size: 0.5em;
+    color: var(--r-background-color);
+    filter: invert(0.75);
+    opacity: 0.5;
+    margin: 0;
+    margin: 0;
+    z-index: 2;
+}
+
+div#credits p {
     margin: 0;
 }
 
-div#credits div#credit.credit p {
-    margin: 0;
-}
-
-div#credits div#credit.credit > p:before {
+div#credits > p:before {
     content: var(--r-credits-prefix, "Source:");
-    margin-right: 0.33em;
+    margin-right: 0.5em;
 }
 
+/*
 div#credits div#credit.credit {
     display: flex;
     position: relative;
@@ -33,7 +42,6 @@ div#credits div#credit.credit {
     z-index: 2;
 }
 
-/*
 section.has-dark-background div#credits div#credit.credit {
     color: inherit;
     filter: invert(0.2);
