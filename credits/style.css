@@ -1,14 +1,10 @@
 div#credits {
     display: block;
     position: absolute; 
-    top: 50%;
-    right: var(--r-credits-margin, 1%);
     transform-origin: center bottom;
-    transform: translateX(50%) rotate(-90deg);
     font-size: 0.5em;
-    color: var(--r-background-color);
-    filter: invert(0.75);
-    opacity: 0.5;
+    color: var(--r-credits-color, var(--r-background-color));
+    opacity: var(--r-credits-opacity, 0.5);
     margin: 0;
     margin: 0;
     z-index: 2;

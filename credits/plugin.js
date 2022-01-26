@@ -1,7 +1,7 @@
 /*****************************************************************
 ** Author: Giovanni Senatore, giovanni.senatore@gmail.com
 **
-** A plugin that adds credit information
+** A plugin that adds credits information
 **
 ** Version: 1.0.0
 ** 
@@ -17,33 +17,67 @@ window.RevealCredits = window.RevealCredits || {
 
 const initCredits = function(Reveal){
 	let config = Reveal.getConfig().credits || {};
-	let prefix = config.prefix;
-	let margin = config.margin;
+	    prefix = config.prefix,
+	    opacity = config.opacity,
+	    position = config.position,
+	    transform = config.transform,
+	    filter = config.filter,
+	    color = config.color;
 
 	let div = document.createElement( 'div' );
 	div.id = 'credits';
 	div.classList.add( 'credits' );
 	div.hidden = true;
-	console.debug(config);
+
 	if (prefix)
 		div.style.setProperty('--r-credits-prefix', "'" + prefix + ":'");
-	if (margin)
-		div.style.setProperty('--r-credits-margin', margin);
+
+	if (opacity)
+		div.style.setProperty('--r-credits-opacity', opacity);
+
+	if (color)
+		div.style.setProperty('--r-credits-color', color);
+
+	if (position) {
+		if (position['top']) div.style.setProperty('top', position['top']);
+		if (position['bottom']) div.style.setProperty('bottom', position['bottom']);
+		if (position['right']) div.style.setProperty('right', position['right']);
+		if (position['left']) div.style.setProperty('left', position['left']);
+	} else {
+		div.style.setProperty('top', '50%');
+		div.style.setProperty('right', '1%');
+	}
+
+	if (transform) {
+		div.style.setProperty('transform', transform);
+	} else if (!position) {
+		div.style.setProperty('transform', 'translateX(50%) rotate(-90deg)');
+	}
+
+	if (filter) {
+		div.style.setProperty('filter', filter);
+	} else {
+		div.style.setProperty('filter', 'invert(0.25)');
+	}
 
 	document.querySelectorAll('.reveal > div#credits > *').forEach(el => { el.remove(); });
 	document.querySelector('.reveal').appendChild( div );
 
 	Reveal.addEventListener('slidechanged', function( event ) {
-		event.previousSlide.querySelectorAll('sup.apex').forEach(el => { el.remove(); });
-
 		document.querySelectorAll('.reveal > div#credits > *').forEach(el => { el.remove(); });
 
-		let credit = document.querySelector('.reveal > div#credits');
-		let infoCredit = event.currentSlide.getAttribute('data-info-credit');
+		let infoCredit = event.currentSlide.getAttribute('data-info-credits');
 
 		if (infoCredit === undefined || infoCredit === null || infoCredit.length === 0) {
 			return;
 		}
+
+		let fg = event.currentSlide.getAttribute('data-info-credits-color');
+
+		if (fg)
+			div.style.setProperty('color', fg);
+		else
+			div.style.removeProperty('color');
 
 		let p = document.createElement('p');
 		let text = document.createTextNode( infoCredit );
@@ -60,7 +94,4 @@ const initCredits = function(Reveal){
 	});
 
 	return this;
-
 };
-
-
