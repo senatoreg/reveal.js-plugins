@@ -57,7 +57,7 @@ const initCredits = function(Reveal){
 	if (filter) {
 		div.style.setProperty('filter', filter);
 	} else {
-		div.style.setProperty('filter', 'invert(0.25)');
+		div.style.setProperty('filter', 'invert(0.9)');
 	}
 
 	document.querySelectorAll('.reveal > div#credits > *').forEach(el => { el.remove(); });
