@@ -18,28 +18,3 @@ div#credits > p:before {
     content: var(--r-credits-prefix, "Source:");
     margin-right: 0.5em;
 }
-
-/*
-div#credits div#credit.credit {
-    display: flex;
-    position: relative;
-    top: 50%;
-    right: 0px;
-    transform-origin: center bottom;
-    transform: translateX(47.5%) rotate(-90deg);
-    font-size: 0.5em;
-    color: var(--r-background-color);
-    filter: invert(0.75);
-    opacity: 0.5;
-    margin: 0;
-    justify-content: center;
-    align-items: center;
-    gap: 0.25em;
-    z-index: 2;
-}
-
-section.has-dark-background div#credits div#credit.credit {
-    color: inherit;
-    filter: invert(0.2);
-}
-*/
