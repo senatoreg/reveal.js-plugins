@@ -66,13 +66,13 @@ const initCredits = function(Reveal){
 	Reveal.addEventListener('slidechanged', function( event ) {
 		document.querySelectorAll('.reveal > div#credits > *').forEach(el => { el.remove(); });
 
-		let infoCredit = event.currentSlide.getAttribute('data-info-credits');
+		let infoCredit = event.currentSlide.getAttribute('data-credits');
 
 		if (infoCredit === undefined || infoCredit === null || infoCredit.length === 0) {
 			return;
 		}
 
-		let fg = event.currentSlide.getAttribute('data-info-credits-color');
+		let fg = event.currentSlide.getAttribute('data-credits-color');
 
 		if (fg)
 			div.style.setProperty('color', fg);
