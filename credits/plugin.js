@@ -33,7 +33,7 @@ const initCredits = function(Reveal){
 	//div.hidden = true;
 
 	if (prefix)
-		div.style.setProperty('--r-credits-prefix', "'" + prefix + ":'");
+		div.style.setProperty('--r-credits-prefix', "'" + prefix + "'");
 
 	if (opacity)
 		div.style.setProperty('--r-credits-opacity', opacity);
@@ -59,6 +59,7 @@ const initCredits = function(Reveal){
 
 		let credits = currentSlide.getAttribute('data-credits');
 		let prefix = currentSlide.getAttribute('data-credits-prefix');
+		let separator = currentSlide.getAttribute('data-credits-separator');
 
 		if (credits === undefined || credits === null || credits.length === 0) {
 			return;
@@ -71,6 +72,8 @@ const initCredits = function(Reveal){
 			p.style.setProperty('color', color);
 		if (prefix === undefined || prefix === null || prefix.length === 0)
 			p.style.setProperty('--r-credits-prefix', prefix);
+		if (separator === undefined || separator === null || separator.length === 0)
+			p.style.setProperty('--r-credits-separator', prefix);
 
 		let text = document.createTextNode( credits );
 		p.appendChild(text);

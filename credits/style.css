@@ -14,6 +14,6 @@ div#credits p {
 }
 
 div#credits > p:before {
-    content: var(--r-credits-prefix, "Source:");
+    content: var(--r-credits-prefix, "Credits") var(--r-credits-separator, ":");
     margin-right: 0.5em;
 }
