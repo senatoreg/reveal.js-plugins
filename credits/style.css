@@ -2,7 +2,7 @@ div#credits {
     display: block;
     position: absolute; 
     transform-origin: center bottom;
-    font-size: 0.33em;
+    font-size: 0.4em;
     color: var(--r-credits-color, var(--r-background-color));
     opacity: var(--r-credits-opacity, 0.25);
     margin: 0;
