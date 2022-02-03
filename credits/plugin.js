@@ -64,22 +64,23 @@ const initCredits = function(Reveal){
 	document.querySelector('.reveal').appendChild( div );
 
 	Reveal.addEventListener('slidechanged', function( event ) {
-		document.querySelectorAll('.reveal > div#credits > *').forEach(el => { el.remove(); });
+		var fg;
 
-		let infoCredit = event.currentSlide.getAttribute('data-credits');
+		div.querySelectorAll('*').forEach(el => { el.remove(); });
+
+		let currentSlide = event.currentSlide;
+
+		let infoCredit = currentSlide.getAttribute('data-credits');
 
 		if (infoCredit === undefined || infoCredit === null || infoCredit.length === 0) {
 			return;
 		}
 
-		let fg = event.currentSlide.getAttribute('data-credits-color');
-
-		if (fg)
-			div.style.setProperty('color', fg);
-		else
-			div.style.removeProperty('color');
+		fg = currentSlide.getAttribute('data-background-color');
 
 		let p = document.createElement('p');
+		if (fg)
+			p.style.setProperty('color', fg);
 		let text = document.createTextNode( infoCredit );
 		p.appendChild(text);
 		div.appendChild(p);
