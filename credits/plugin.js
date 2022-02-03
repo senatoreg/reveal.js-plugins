@@ -77,7 +77,7 @@ const initCredits = function(Reveal){
 		if (prefix !== undefined && prefix !== null && prefix.length > 0)
 			p.style.setProperty('--r-credits-prefix', "'" + prefix + "'");
 		if (separator !== undefined && separator !== null && separator.length > 0)
-			p.style.setProperty('--r-credits-separator', "'" + separator + "');
+			p.style.setProperty('--r-credits-separator', "'" + separator + "'");
 
 		let text = document.createTextNode( credits );
 		p.appendChild(text);
