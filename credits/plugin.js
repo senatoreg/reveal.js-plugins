@@ -74,10 +74,10 @@ const initCredits = function(Reveal){
 		let p = document.createElement('p');
 		if (color)
 			p.style.setProperty('color', color);
-		if (prefix === undefined || prefix === null || prefix.length === 0)
-			p.style.setProperty('--r-credits-prefix', prefix);
-		if (separator === undefined || separator === null || separator.length === 0)
-			p.style.setProperty('--r-credits-separator', prefix);
+		if (prefix !== undefined && prefix !== null && prefix.length > 0)
+			p.style.setProperty('--r-credits-prefix', "'" + prefix + "'");
+		if (separator !== undefined && separator !== null && separator.length > 0)
+			p.style.setProperty('--r-credits-separator', "'" + separator + "');
 
 		let text = document.createTextNode( credits );
 		p.appendChild(text);
