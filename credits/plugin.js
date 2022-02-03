@@ -15,19 +15,22 @@ window.RevealCredits = window.RevealCredits || {
     }
 };
 
+
 const initCredits = function(Reveal){
-	let config = Reveal.getConfig().credits || {};
+	let config = Reveal.getConfig().credits || {},
+	    size = Reveal.getComputedSlideSize(),
 	    prefix = config.prefix,
 	    opacity = config.opacity,
-	    position = config.position,
-	    transform = config.transform,
-	    filter = config.filter,
+	    position = config.position || { top: '50%', right: '1%' },
+	    transform = config.transform || 'translate(50%, 0) rotate(-90deg)',
+	    filter = config.filter || 'invert(0.9)',
 	    color = config.color;
 
 	let div = document.createElement( 'div' );
 	div.id = 'credits';
 	div.classList.add( 'credits' );
-	div.hidden = true;
+	//div.style.setProperty('width', size.width + 'px');
+	//div.hidden = true;
 
 	if (prefix)
 		div.style.setProperty('--r-credits-prefix', "'" + prefix + ":'");
@@ -38,50 +41,38 @@ const initCredits = function(Reveal){
 	if (color)
 		div.style.setProperty('--r-credits-color', color);
 
-	if (position) {
-		if (position['top']) div.style.setProperty('top', position['top']);
-		if (position['bottom']) div.style.setProperty('bottom', position['bottom']);
-		if (position['right']) div.style.setProperty('right', position['right']);
-		if (position['left']) div.style.setProperty('left', position['left']);
-	} else {
-		div.style.setProperty('top', '50%');
-		div.style.setProperty('right', '1%');
-	}
+	if (position.top) div.style.setProperty('top', position.top);
+	if (position.bottom) div.style.setProperty('bottom', position.bottom);
+	if (position.right) div.style.setProperty('right', position.right);
+	if (position.left) div.style.setProperty('left', position.left);
 
-	if (transform) {
-		div.style.setProperty('transform', transform);
-	} else if (!position) {
-		div.style.setProperty('transform', 'translateX(50%) rotate(-90deg)');
-	}
-
-	if (filter) {
-		div.style.setProperty('filter', filter);
-	} else {
-		div.style.setProperty('filter', 'invert(0.9)');
-	}
+        div.style.setProperty('transform', transform + ' scale(' + Reveal.getScale() + ')');
+	div.style.setProperty('filter', filter);
 
 	document.querySelectorAll('.reveal > div#credits > *').forEach(el => { el.remove(); });
 	document.querySelector('.reveal').appendChild( div );
 
 	Reveal.addEventListener('slidechanged', function( event ) {
-		var fg;
-
 		div.querySelectorAll('*').forEach(el => { el.remove(); });
 
 		let currentSlide = event.currentSlide;
 
-		let infoCredit = currentSlide.getAttribute('data-credits');
+		let credits = currentSlide.getAttribute('data-credits');
+		let prefix = currentSlide.getAttribute('data-credits-prefix');
 
-		if (infoCredit === undefined || infoCredit === null || infoCredit.length === 0) {
+		if (credits === undefined || credits === null || credits.length === 0) {
 			return;
 		}
 
-		fg = currentSlide.getAttribute('data-background-color');
+		let color = currentSlide.getAttribute('data-background-color');
 
 		let p = document.createElement('p');
-		if (fg)
-			p.style.setProperty('color', fg);
-		let text = document.createTextNode( infoCredit );
+		if (color)
+			p.style.setProperty('color', color);
+		if (prefix === undefined || prefix === null || prefix.length === 0)
+			p.style.setProperty('--r-credits-prefix', prefix);
+
+		let text = document.createTextNode( credits );
 		p.appendChild(text);
 		div.appendChild(p);
 	});
@@ -92,6 +83,10 @@ const initCredits = function(Reveal){
 
 	Reveal.addEventListener('overviewhidden', function( event ) {
 		div.style.removeProperty('display');
+	});
+
+	Reveal.addEventListener('resize', function(event) {
+		div.style.setProperty('transform', transform + ' scale(' + event.scale + ')');
 	});
 
 	return this;

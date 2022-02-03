@@ -1,11 +1,11 @@
 div#footnote {
     display: block;
     position: fixed; 
-    font-size: 0.5em;
+    font-size: 0.33em;
     opacity: var(--r-footnote-opacity, 1);
-    left: 5%;
+    transform-origin: center bottom;
+    left: 50%;
     bottom: 7.5%;
-    width: 90%;
     margin: 0;
     z-index: 2;
 }
@@ -19,7 +19,7 @@ div#footnote * {
     vertical-align: super;
 }
 
-div#footnote ul, div#footnote ol {
+div#footnote ul {
     display: flex;
     /*justify-content: space-between;*/
     justify-content: flex-start;
@@ -32,7 +32,7 @@ div#footnote ul, div#footnote ol {
     list-style: none;
 }
 
-div#footnote ol li::before {
+div#footnote ul li::before {
     content: var(--r-footnote-ref);
     margin-right: 0.33em;
     font-size: 0.5em;

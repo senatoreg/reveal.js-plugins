@@ -11,15 +11,16 @@
 window.RevealFootnote = window.RevealFootnote || {
     id: 'RevealFootnote',
     init: function(deck) {
-        initFootnote(deck);
+	initFootnote(deck);
     }
 };
 
 const initFootnote = function(Reveal){
-	let config = Reveal.getConfig().footnote || {};
+	let config = Reveal.getConfig().footnote || {},
+	    size = Reveal.getComputedSlideSize(),
 	    opacity = config.opacity,
 	    position = config.position,
-	    transform = config.transform,
+	    transform = config.transform || 'translate(-50%, 0)',
 	    filter = config.filter,
 	    color = config.color;
 
@@ -27,6 +28,8 @@ const initFootnote = function(Reveal){
 	div.id = 'footnote';
 	div.classList.add( 'footnote' );
 	// div.hidden = true;
+	div.style.setProperty('width', (size.width) + 'px');
+	div.style.setProperty('transform', transform + ' scale(' + Reveal.getScale() + ')');
 
 	if (opacity)
 		div.style.setProperty('--r-footnote-opacity', opacity);
@@ -35,25 +38,25 @@ const initFootnote = function(Reveal){
 		div.style.setProperty('--r-footnote-color', color);
 
 	if (position) {
-		if (position['top']) div.style.setProperty('top', position['top']);
-		if (position['bottom']) div.style.setProperty('bottom', position['bottom']);
-		if (position['right']) div.style.setProperty('right', position['right']);
-		if (position['left']) div.style.setProperty('left', position['left']);
+		if (position.top) div.style.setProperty('top', position.top);
+		if (position.bottom) div.style.setProperty('bottom', position.bottom);
+		if (position.right) div.style.setProperty('right', position.right);
+		if (position.left) div.style.setProperty('left', position.left);
 	}
 
-	let ol = document.createElement( 'ol' );
-	div.appendChild(ol);
+	let ul = document.createElement( 'ul' );
+	div.appendChild(ul);
 
-	document.querySelectorAll('.reveal > div#footnote > ol > *').forEach(el => { el.remove(); });
+	document.querySelectorAll('.reveal > div#footnote > ul > *').forEach(el => { el.remove(); });
 	document.querySelectorAll('.reveal > div#footnote > *').forEach(el => { el.remove(); });
 	document.querySelector('.reveal').appendChild( div );
 	// document.querySelector('.reveal div.slides').appendChild( div );
 
 	Reveal.addEventListener('slidechanged', function( event ) {
 		event.previousSlide.querySelectorAll('span.footnote').forEach(el => { el.remove(); });
-		// document.querySelectorAll('.reveal > div#footnote > ol > *').forEach(el => { el.remove(); });
-		ol.querySelectorAll('*').forEach(el => { el.remove(); });
-		// document.querySelectorAll('.reveal div.slides > div#footnote > ol > *').forEach(el => { el.remove(); });
+		// document.querySelectorAll('.reveal > div#footnote > ul > *').forEach(el => { el.remove(); });
+		ul.querySelectorAll('*').forEach(el => { el.remove(); });
+		// document.querySelectorAll('.reveal div.slides > div#footnote > ul > *').forEach(el => { el.remove(); });
 
 		const currentSlide = event.currentSlide;
 		let slidefootnote = [];
@@ -81,7 +84,7 @@ const initFootnote = function(Reveal){
 					li.style.setProperty('--r-footnote-ref', "'" + c + "'");
 					li.style.setProperty('color', color);
 					li.appendChild(text);
-					ol.appendChild(li);
+					ul.appendChild(li);
 				} else {
 					c = idx + 1;
 				}
@@ -101,6 +104,10 @@ const initFootnote = function(Reveal){
 
 	Reveal.addEventListener('overviewhidden', function( event ) {
 		div.style.removeProperty('display');
+	});
+
+	Reveal.addEventListener('resize', function(event) {
+		div.style.setProperty('transform', transform + ' scale(' + event.scale + ')');
 	});
 
 	return this;
