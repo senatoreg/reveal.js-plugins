@@ -20,6 +20,7 @@ const initCredits = function(Reveal){
 	let config = Reveal.getConfig().credits || {},
 	    size = Reveal.getComputedSlideSize(),
 	    prefix = config.prefix,
+	    separator = config.separator,
 	    opacity = config.opacity,
 	    position = config.position || { top: '50%', right: '1%' },
 	    transform = config.transform || 'translate(50%, 0) rotate(-90deg)',
@@ -34,6 +35,9 @@ const initCredits = function(Reveal){
 
 	if (prefix)
 		div.style.setProperty('--r-credits-prefix', "'" + prefix + "'");
+
+	if (separator)
+		div.style.setProperty('--r-credits-separator', "'" + separator + "'");
 
 	if (opacity)
 		div.style.setProperty('--r-credits-opacity', opacity);
