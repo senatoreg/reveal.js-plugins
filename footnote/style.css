@@ -1,7 +1,7 @@
 div#footnote {
     display: block;
     position: fixed; 
-    font-size: 0.33em;
+    font-size: 0.4em;
     opacity: var(--r-footnote-opacity, 1);
     transform-origin: center bottom;
     left: 50%;
