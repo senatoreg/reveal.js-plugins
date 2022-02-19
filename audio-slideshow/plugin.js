@@ -127,7 +127,7 @@ const initAudioSlideshow = function(Reveal){
 				currentAudio.playbackRate = previousAudio.playbackRate;
 			}
 //console.debug( "Play " + currentAudio.id);
-			if ( autoplay && !currentAudio.hasAttribute('data-audioslide-linked') ) {
+			if ( autoplay && !currentAudio.hasAttribute('data-audio-linked') ) {
 				if ( delay > 0 ) {
 					timer = setTimeout( function() {
 						timer = null;
@@ -266,7 +266,7 @@ const initAudioSlideshow = function(Reveal){
 // alert( h + '.' + v + ": " + text );
 // console.log( h + '.' + v + ": " + text );
 		}
-		setupAudioElement( container, h + '.' + v, slide.getAttribute( 'data-audio-src' ), text, slide.querySelector( ':not(.fragment) > video' ) );
+		setupAudioElement( container, h + '.' + v, slide.getAttribute( 'data-audio-src' ), text, slide.querySelector( ':not(.fragment) > video:not(.fragment)' ) );
 		var i = 0;
 		var  fragments;
 		while ( (fragments = slide.querySelectorAll( '.fragment[data-fragment-index="' + i +'"]' )).length > 0 ) {
@@ -275,7 +275,7 @@ const initAudioSlideshow = function(Reveal){
 			var text = '';
 			for( var f = 0, len = fragments.length; f < len; f++ ) {
 				if ( !audio ) audio = fragments[ f ].getAttribute( 'data-audio-src' );
-				if ( !video ) video = fragments[ f ].querySelector( 'video' );
+				if ( !video ) video = fragments[ f ].tagName === 'VIDEO' ? fragments[ f ] : fragments[ f ].querySelector( 'video' );
 				// determine text for TTS
 				if ( fragments[ f ].hasAttribute( 'data-audio-text' ) ) {
 					text += fragments[ f ].getAttribute( 'data-audio-text' ) + ' ';
@@ -295,7 +295,7 @@ const initAudioSlideshow = function(Reveal){
 	function linkVideoToAudioControls( audioElement, videoElement ) {
 		videoElement.addEventListener( 'ended', function( event ) {
 			audioElement.currentTime = 0;
-			audioElement.play();
+			if ( autoplay ) audioElement.play();
 		} );
 		videoElement.addEventListener( 'play', function( event ) {
 			audioElement.pause();
@@ -304,7 +304,7 @@ const initAudioSlideshow = function(Reveal){
 			videoElement.pause();
 			audioElement.currentTime = 0;
 		} );
-		audioElement.setAttribute( 'data-audioslide-linked', '');
+		audioElement.setAttribute( 'data-audio-linked', '');
 	}
 
 	function setupFallbackAudio( audioElement, text, videoElement ) {
