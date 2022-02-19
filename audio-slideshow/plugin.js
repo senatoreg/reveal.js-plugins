@@ -43,7 +43,6 @@ const initAudioSlideshow = function(Reveal){
 	var currentAudio = null;
 	var previousAudio = null;
 	var timer = null;
-	var advanced = false; // automatically start next slide
 
 	Reveal.addEventListener( 'fragmentshown', function( event ) {
 		if ( timer ) { clearTimeout( timer ); timer = null; }
@@ -128,8 +127,7 @@ const initAudioSlideshow = function(Reveal){
 				currentAudio.playbackRate = previousAudio.playbackRate;
 			}
 //console.debug( "Play " + currentAudio.id);
-			if ( advanced || autoplay ) {
-				advanced = false;
+			if ( autoplay && !currentAudio.hasAttribute('data-audioslide-linked') ) {
 				if ( delay > 0 ) {
 					timer = setTimeout( function() {
 						timer = null;
@@ -268,7 +266,7 @@ const initAudioSlideshow = function(Reveal){
 // alert( h + '.' + v + ": " + text );
 // console.log( h + '.' + v + ": " + text );
 		}
-		setupAudioElement( container, h + '.' + v, slide.getAttribute( 'data-audio-src' ), text, slide.querySelector( ':not(.fragment) > video[data-audio-controls]' ) );
+		setupAudioElement( container, h + '.' + v, slide.getAttribute( 'data-audio-src' ), text, slide.querySelector( ':not(.fragment) > video' ) );
 		var i = 0;
 		var  fragments;
 		while ( (fragments = slide.querySelectorAll( '.fragment[data-fragment-index="' + i +'"]' )).length > 0 ) {
@@ -277,7 +275,7 @@ const initAudioSlideshow = function(Reveal){
 			var text = '';
 			for( var f = 0, len = fragments.length; f < len; f++ ) {
 				if ( !audio ) audio = fragments[ f ].getAttribute( 'data-audio-src' );
-				if ( !video ) video = fragments[ f ].querySelector( 'video[data-audio-controls]' );
+				if ( !video ) video = fragments[ f ].querySelector( 'video' );
 				// determine text for TTS
 				if ( fragments[ f ].hasAttribute( 'data-audio-text' ) ) {
 					text += fragments[ f ].getAttribute( 'data-audio-text' ) + ' ';
@@ -295,33 +293,18 @@ const initAudioSlideshow = function(Reveal){
 
 	// try to sync video with audio controls
 	function linkVideoToAudioControls( audioElement, videoElement ) {
-		audioElement.addEventListener( 'playing', function( event ) {
-			videoElement.currentTime = audioElement.currentTime;
+		videoElement.addEventListener( 'ended', function( event ) {
+			audioElement.currentTime = 0;
+			audioElement.play();
+		} );
+		videoElement.addEventListener( 'play', function( event ) {
+			audioElement.pause();
 		} );
 		audioElement.addEventListener( 'play', function( event ) {
-			videoElement.currentTime = audioElement.currentTime;
-			if ( videoElement.paused ) videoElement.play();
+			videoElement.pause();
+			audioElement.currentTime = 0;
 		} );
-		audioElement.addEventListener( 'pause', function( event ) {
-			videoElement.currentTime = audioElement.currentTime;
-			if ( !videoElement.paused ) videoElement.pause();
-		} );
-		audioElement.addEventListener( 'volumechange', function( event ) {
-			videoElement.volume = audioElement.volume;
-			videoElement.muted = audioElement.muted;
-		} );
-		audioElement.addEventListener( 'seeked', function( event ) {
-			videoElement.currentTime = audioElement.currentTime;
-		} );
-
-		// add silent audio to video to be used as fallback
-		var audioSource = audioElement.querySelector('source[data-audio-silent]');
-		if ( audioSource ) audioElement.removeChild( audioSource );
-		audioSource = document.createElement( 'source' );
-		var videoSilence = new SilentAudio( Math.round(videoElement.duration + .5) ); // create the wave file
-		audioSource.src= videoSilence.dataURI;
-		audioSource.setAttribute("data-audio-silent", videoElement.duration);
-		audioElement.appendChild(audioSource, audioElement.firstChild);
+		audioElement.setAttribute( 'data-audioslide-linked', '');
 	}
 
 	function setupFallbackAudio( audioElement, text, videoElement ) {
@@ -352,15 +335,7 @@ const initAudioSlideshow = function(Reveal){
 		audioElement.setAttribute( 'preload', 'none' );
 
 		if ( videoElement ) {
-			// connect play, pause, volumechange, mute, timeupdate events to video
-			if ( videoElement.duration ) {
-				linkVideoToAudioControls( audioElement, videoElement );
-			}
-			else {
-				videoElement.addEventListener('loadedmetadata', (event) => {
-					linkVideoToAudioControls( audioElement, videoElement );
-				});
-			}
+			linkVideoToAudioControls( audioElement, videoElement );
 		}
 		audioElement.addEventListener( 'ended', function( event ) {
 			if ( typeof Recorder == 'undefined' || !Recorder.isRecording ) {
@@ -380,13 +355,11 @@ const initAudioSlideshow = function(Reveal){
 				}
 				// advance immediately or set a timer - or do nothing
 				if ( advance == "true" || advanceNow == 0 ) {
-					advanced = true;
 					Reveal.next();
 				}
 				else if ( advanceNow > 0 ) {
 					timer = setTimeout( function() {
 						timer = null;
-						advanced = true;
 						Reveal.next();
 					}, advanceNow );
 				}
