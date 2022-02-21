@@ -288,16 +288,14 @@ const initAudioSlideshow = function(Reveal){
 // alert( h + '.' + v + ": " + text );
 // console.log( h + '.' + v + ": " + text );
 		}
-		setupAudioElement( container, h + '.' + v, slide.getAttribute( 'data-audio-src' ), text, slide.querySelector( ':not(.fragment) > video.data-audio-content:not(.fragment)' ) );
+		setupAudioElement( container, h + '.' + v, slide.getAttribute( 'data-audio-src' ), text, null );
 		var i = 0;
 		var  fragments;
-		while ( (fragments = queryAll( '.fragment[data-fragment-index="' + i +'"]', slide )).length > 0 ) {
+		while ( (fragments = slide.querySelectorAll( '.fragment[data-fragment-index="' + i +'"]' )).length > 0 ) {
 			var audio = null;
-			var video = null;
 			var text = '';
 			for( var f = 0, len = fragments.length; f < len; f++ ) {
 				if ( !audio ) audio = fragments[ f ].getAttribute( 'data-audio-src' );
-				if ( !video ) video = fragments[ f ].tagName === 'VIDEO' && fragments[ f ].classList.contains('data-audio-content') ? fragments[ f ] : fragments[ f ].querySelector( 'video.data-audio-content' );
 				// determine text for TTS
 				if ( fragments[ f ].hasAttribute( 'data-audio-text' ) ) {
 					text += fragments[ f ].getAttribute( 'data-audio-text' ) + ' ';
@@ -308,7 +306,7 @@ const initAudioSlideshow = function(Reveal){
 				}
 			}
 //console.log( h + '.' + v + '.' + i  + ": >" + text +"<")
-			setupAudioElement( container, h + '.' + v + '.' + i, audio, text, video  );
+			setupAudioElement( container, h + '.' + v + '.' + i, audio, text, null  );
  			i++;
 		}
 	}
