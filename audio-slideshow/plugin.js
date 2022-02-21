@@ -114,9 +114,15 @@ const initAudioSlideshow = function(Reveal){
 			currentAudio.pause();
 			currentAudio.style.display = "none";
 		}
+		var slide = Reveal.getCurrentSlide();
 		var indices = Reveal.getIndices();
 		var id = "audioplayer-" + indices.h + '.' + indices.v;
-		if ( indices.f != undefined && indices.f > -1 ) id = id + '.' + indices.f;
+		var selector = 'video.data-audio-content:not(.fragment)';
+		var video;
+		if ( indices.f !== undefined && indices.f > -1 ) {
+			id = id + '.' + indices.f;
+			selector = 'video.fragment.current-fragment.data-audio-content';
+		}
 		previousAudio = currentAudio;
 		currentAudio = document.getElementById( id );
 		if ( currentAudio ) {
@@ -127,6 +133,13 @@ const initAudioSlideshow = function(Reveal){
 				currentAudio.playbackRate = previousAudio.playbackRate;
 			}
 //console.debug( "Play " + currentAudio.id);
+			if ( !currentAudio.hasAttribute('data-audio-linked') ) {
+				video = queryAll( selector );
+				if ( video.length > 0 ) {
+					video.sort((a, b) => { return b.duration - a.duration; });
+					linkVideoAndAudioEvents(currentAudio, video[0]);
+				}
+			}
 			if ( autoplay && !currentAudio.hasAttribute('data-audio-linked') ) {
 				if ( delay > 0 ) {
 					timer = setTimeout( function() {
@@ -193,7 +206,7 @@ const initAudioSlideshow = function(Reveal){
 		document.querySelector( ".reveal" ).appendChild( divElement );
 
 		// preload all video elements that meta data becomes available as early as possible
-		preloadVideoELements();
+		preloadVideoElements();
 
 		// create audio players for all slides
 		var horizontalSlides = document.querySelectorAll( '.reveal .slides>section' );
@@ -210,7 +223,7 @@ const initAudioSlideshow = function(Reveal){
 		}
 	}
 
-	function preloadVideoELements() {
+	function preloadVideoElements() {
 		var videoElements = document.querySelectorAll( 'video[data-audio-controls]' );
 		for( var i = 0; i < videoElements.length; i++ ) {
 //console.warn(videoElements[i]);
@@ -225,6 +238,15 @@ const initAudioSlideshow = function(Reveal){
 			textContainer.innerHTML = textContainer.innerHTML.replace(elements[i].outerHTML,elements[i].getAttribute('data-audio-text'));
 		}
 		return textContainer.textContent.trim().replace(/\s+/g, ' ');
+	}
+
+	function queryAll( selector, slide = Reveal.getCurrentSlide() ) {
+		let background = Reveal.getSlideBackground( slide );
+
+		let elements = Array.from( slide.querySelectorAll( selector ) );
+		elements = elements.concat( Array.from( background.querySelectorAll( selector ) ) );
+
+		return elements;
 	}
 
 	function setupAllAudioElements( container, h, v, slide ) {
@@ -266,16 +288,16 @@ const initAudioSlideshow = function(Reveal){
 // alert( h + '.' + v + ": " + text );
 // console.log( h + '.' + v + ": " + text );
 		}
-		setupAudioElement( container, h + '.' + v, slide.getAttribute( 'data-audio-src' ), text, slide.querySelector( ':not(.fragment) > video[data-audio-content]:not(.fragment)' ) );
+		setupAudioElement( container, h + '.' + v, slide.getAttribute( 'data-audio-src' ), text, slide.querySelector( ':not(.fragment) > video.data-audio-content:not(.fragment)' ) );
 		var i = 0;
 		var  fragments;
-		while ( (fragments = slide.querySelectorAll( '.fragment[data-fragment-index="' + i +'"]' )).length > 0 ) {
+		while ( (fragments = queryAll( '.fragment[data-fragment-index="' + i +'"]', slide )).length > 0 ) {
 			var audio = null;
 			var video = null;
 			var text = '';
 			for( var f = 0, len = fragments.length; f < len; f++ ) {
 				if ( !audio ) audio = fragments[ f ].getAttribute( 'data-audio-src' );
-				if ( !video ) video = fragments[ f ].tagName === 'VIDEO' && fragments[ f ].hasAttribute('data-audio-content') ? fragments[ f ] : fragments[ f ].querySelector( 'video[data-audio-content]' );
+				if ( !video ) video = fragments[ f ].tagName === 'VIDEO' && fragments[ f ].classList.contains('data-audio-content') ? fragments[ f ] : fragments[ f ].querySelector( 'video.data-audio-content' );
 				// determine text for TTS
 				if ( fragments[ f ].hasAttribute( 'data-audio-text' ) ) {
 					text += fragments[ f ].getAttribute( 'data-audio-text' ) + ' ';
@@ -292,7 +314,7 @@ const initAudioSlideshow = function(Reveal){
 	}
 
 	// try to sync video with audio controls
-	function linkVideoToAudioControls( audioElement, videoElement ) {
+	function linkVideoAndAudioEvents( audioElement, videoElement ) {
 		videoElement.addEventListener( 'ended', function( event ) {
 			audioElement.currentTime = 0;
 			if ( autoplay ) audioElement.play();
@@ -335,7 +357,7 @@ const initAudioSlideshow = function(Reveal){
 		audioElement.setAttribute( 'preload', 'none' );
 
 		if ( videoElement ) {
-			linkVideoToAudioControls( audioElement, videoElement );
+			linkVideoAndAudioEvents( audioElement, videoElement );
 		}
 		audioElement.addEventListener( 'ended', function( event ) {
 			if ( typeof Recorder == 'undefined' || !Recorder.isRecording ) {
