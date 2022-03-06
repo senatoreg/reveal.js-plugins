@@ -20,8 +20,9 @@ const initFitText = function(Reveal){
 
 	let config = Reveal.getConfig().fittext || {},
 	    elements = config.elements || [ 'blockquote' ],
-	    selector = elements.map(e => e + ':not([' + attr + '])').join(','),
-	    scale = config.scale || .75,
+	    selector = elements.map(e => 'section > ' + e + ':not([' + attr + '])').join(','),
+	    scale = config.scale || .7,
+	    defaultPixelSize = parseFloat(window.getComputedStyle(document.body).fontSize),
 	    size = Reveal.getComputedSlideSize(),
 	    height = size.height * scale;
 
@@ -42,6 +43,11 @@ const initFitText = function(Reveal){
 		//let client = parseInt(s.height, 10);
 
 		let outerHeight = height,
+		    outerWidth = parseInt(s.width, 10),
+		    fontSize = parseInt(s.fontSize, 10),
+		    lineHeight = parseInt(s.lineHeight, 10) / fontSize,
+		    pixelWidthRatio = defaultPixelSize / parseInt(s.fontSize, 10),
+		    textLength = e.innerText.length,
 		    innerHeight = 0;
 
 		e.querySelectorAll(e.tagName + ' > *').forEach(function(e0, i0) {
@@ -55,14 +61,14 @@ const initFitText = function(Reveal){
 		});
 
 		if (outerHeight < innerHeight) {
-		    let ratio = outerHeight / innerHeight;
-
+		    let ratio = Math.pow(outerHeight * outerWidth / (lineHeight * pixelWidthRatio * textLength), 1/2) / fontSize ;
 		    ratio = ratio.toPrecision(4);
 
 
 		    e.setAttribute(attr, ratio);
 		    //e.style.setProperty('max-height', client + 'px');
 		    e.style.setProperty('font-size', ratio + 'em');
+		    e.style.setProperty('line-height', lineHeight + 'em');
 		}
 	    });
 	});
