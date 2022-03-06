@@ -20,11 +20,11 @@ const initFitText = function(Reveal){
 
 	let config = Reveal.getConfig().fittext || {},
 	    elements = config.elements || [ 'blockquote' ],
-	    selector = elements.map(e => 'section > ' + e + ':not([' + attr + '])').join(','),
+	    selector = elements.map(e => e + ':not([' + attr + '])').join(','),
 	    scale = config.scale || .7,
 	    defaultPixelSize = parseFloat(window.getComputedStyle(document.body).fontSize),
 	    size = Reveal.getComputedSlideSize(),
-	    height = size.height * scale;
+	    maxHeight = size.height * scale;
 
 	Reveal.addEventListener('slidechanged', function( event ) {
 	    let curSlide = event.currentSlide,
@@ -42,7 +42,7 @@ const initFitText = function(Reveal){
 		    //padding = parseInt(s.paddingTop, 10) + parseInt(s.paddingBottom, 10);
 		//let client = parseInt(s.height, 10);
 
-		let outerHeight = height,
+		let outerHeight = maxHeight,
 		    outerWidth = parseInt(s.width, 10),
 		    fontSize = parseInt(s.fontSize, 10),
 		    lineHeight = parseInt(s.lineHeight, 10) / fontSize,
@@ -63,7 +63,6 @@ const initFitText = function(Reveal){
 		if (outerHeight < innerHeight) {
 		    let ratio = Math.pow(outerHeight * outerWidth / (lineHeight * pixelWidthRatio * textLength), 1/2) / fontSize ;
 		    ratio = ratio.toPrecision(4);
-
 
 		    e.setAttribute(attr, ratio);
 		    //e.style.setProperty('max-height', client + 'px');
