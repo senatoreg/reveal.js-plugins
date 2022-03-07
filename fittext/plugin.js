@@ -46,7 +46,7 @@ const initFitText = function(Reveal){
 		    outerWidth = parseInt(s.width, 10),
 		    fontSize = parseInt(s.fontSize, 10),
 		    lineHeight = parseInt(s.lineHeight, 10) / fontSize,
-		    pixelWidthRatio = defaultPixelSize / parseInt(s.fontSize, 10),
+		    pixelWidthRatio = defaultPixelSize / fontSize,
 		    textLength = e.innerText.length,
 		    innerHeight = 0;
 
