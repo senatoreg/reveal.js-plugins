@@ -64,6 +64,9 @@ const initFitText = function(Reveal){
 		    let ratio = Math.pow(outerHeight * outerWidth / (lineHeight * pixelWidthRatio * textLength), 1/2) / fontSize ;
 		    ratio = ratio.toPrecision(4);
 
+		    if (ratio > 1)
+			ratio = (1 / ratio).toPrecision(4);
+
 		    e.setAttribute(attr, ratio);
 		    //e.style.setProperty('max-height', client + 'px');
 		    e.style.setProperty('font-size', ratio + 'em');
