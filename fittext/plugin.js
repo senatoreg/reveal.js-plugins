@@ -20,17 +20,18 @@ const initFitText = function(Reveal){
 
 	let config = Reveal.getConfig().fittext || {},
 	    elements = config.elements || [ 'blockquote' ],
-	    selector = elements.map(e => e + ':not([' + attr + '])').join(','),
+	    selectorSlide = elements.map(e => e + ':not([' + attr + '])').join(','),
+	    selectorFragment = elements.map(e => e + '.fragment:not([' + attr + '])').join(','),
 	    scale = config.scale || .7,
 	    defaultPixelSize = parseFloat(window.getComputedStyle(document.body).fontSize),
 	    size = Reveal.getComputedSlideSize(),
 	    maxHeight = size.height * scale;
 
-	Reveal.addEventListener('slidechanged', function( event ) {
+	const fittext = function( curSlide, selector ) {
+	    /*
 	    let curSlide = event.currentSlide,
 		prevSlide = event.previousSlide;
 
-	    /*
 	    prevSlide.querySelectorAll('blockquote').forEach(function(e, i) {
 		    //event.style.removeProperty('max-height');
 		    event.style.removeProperty('font-size');
@@ -41,6 +42,9 @@ const initFitText = function(Reveal){
 		let s = getComputedStyle(e);
 		    //padding = parseInt(s.paddingTop, 10) + parseInt(s.paddingBottom, 10);
 		//let client = parseInt(s.height, 10);
+
+		if (s.visibility !== 'visible' || s.display === 'none')
+		    return;
 
 		let outerHeight = maxHeight,
 		    outerWidth = parseInt(s.width, 10),
@@ -73,6 +77,18 @@ const initFitText = function(Reveal){
 		    e.style.setProperty('line-height', lineHeight + 'em');
 		}
 	    });
+	};
+
+	Reveal.addEventListener('fragmentshown', function( event ) {
+		fittext( Reveal.getCurrentSlide(), selectorFragment );
+	});
+
+	Reveal.addEventListener('fragmenthidden', function( event ) {
+		fittext( Reveal.getCurrentSlide(), selectorFragment );
+	});
+
+	Reveal.addEventListener('slidechanged', function( event ) {
+		fittext( event.currentSlide, selectorSlide );
 	});
 
 	return this;
