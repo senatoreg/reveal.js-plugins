@@ -231,6 +231,7 @@ const initChalkboard = function ( Reveal ) {
 		if ( config.eraser ) eraser = config.eraser;
 		if ( config.boardmarkers ) boardmarkers = config.boardmarkers;
 		if ( config.chalks ) chalks = config.chalks;
+		if ( config.defaultColors ) color = config.defaultColors;
 
 		if ( config.theme ) theme = config.theme;
 		switch ( theme ) {
