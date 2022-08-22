@@ -6,6 +6,7 @@ div#credits {
     color: var(--r-credits-color, var(--r-background-color));
     opacity: var(--r-credits-opacity, 0.25);
     margin: 0;
+    pointer-events: none;
     z-index: 2;
 }
 
