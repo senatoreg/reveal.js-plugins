@@ -3,7 +3,7 @@
 **
 ** A plugin for reveal.js creating an online seminar.
 **
-** Version: 0.4.3
+** Version: 0.4.4
 **
 ** License: MIT license (see LICENSE.md)
 **
@@ -51,7 +51,11 @@ const initSeminar = function(Reveal){
 
 	const logger = seminar.logger || defaultLogger;
 
-	var socket = io( seminar.server, { path: seminar.server_path } );
+	var socket = io.connect( seminar.server, {
+		path: seminar.server_path,
+		transports: ['websocket'],
+		withCredentials: true
+        });
 	if ( seminar.callback )
 	logger('connect to ', seminar.server);
 	socket.on('connect', function() {
