@@ -8,7 +8,7 @@
 ** available, a blank audio file with default  duration is played
 ** instead.
 **
-** Version: 1.0.2
+** Version: 1.1.0
 **
 ** License: MIT license (see LICENSE.md)
 **
@@ -24,12 +24,14 @@ window.RevealAudioSlideshow = window.RevealAudioSlideshow || {
 const initAudioSlideshow = function(Reveal){
 	// default parameters
 	var prefix = "audio/";
-	var suffix = ".ogg";
+	var suffix = ".webm";
 	var textToSpeechURL = null; // no text to speech converter
-//	var textToSpeechURL = "http://api.voicerss.org/?key=[YOUR_KEY]&hl=en-gb&c=ogg&src="; // the text to speech converter
+//	var textToSpeechURL = "http://localhost/?key=[YOUR_KEY]&hl=en-gb&c=ogg&src="; // the text to speech converter
 	var defaultNotes = false; // use slide notes as default for the text to speech converter
 	var defaultText = false; // use slide text as default for the text to speech converter
 	var defaultDuration = 5; // value in seconds
+	var defaultPlaybackRate = 1.0; // default speed of audio
+	var currentPlaybackRate = 1.0; // current speed of audio
 	var defaultAudios = true; // try to obtain audio for slide and fragment numbers
 	var advance = 0; // advance to next slide after given time in milliseconds after audio has played, use negative value to not advance
 	var delay = 0; // start next slide after given time in milliseconds before audio has played, use negative value to not advance
@@ -137,7 +139,7 @@ const initAudioSlideshow = function(Reveal){
 				video = queryAll( selector );
 				if ( video.length > 0 ) {
 					video.sort((a, b) => { return b.duration - a.duration; });
-					linkVideoAndAudioEvents(currentAudio, video[0]);
+					linkVideoToAudioControls(currentAudio, video[0]);
 				}
 			}
 			if ( autoplay && !currentAudio.hasAttribute('data-audio-linked') ) {
@@ -175,6 +177,11 @@ const initAudioSlideshow = function(Reveal){
 			if ( config.defaultText != null ) defaultText = config.defaultText;
 			if ( config.defaultDuration != null ) defaultDuration = config.defaultDuration;
 			if ( config.defaultAudios != null ) defaultAudios = config.defaultAudios;
+			if ( config.defaultPlaybackRate != null ) {
+				defaultPlaybackRate = config.defaultPlaybackRate;
+				currentPlaybackRate = config.defaultPlaybackRate;
+			}
+
 			if ( config.advance != null ) advance = config.advance;
 			if ( config.delay != null ) delay = config.delay;
 			if ( config.autoplay != null ) autoplay = config.autoplay;
@@ -312,7 +319,7 @@ const initAudioSlideshow = function(Reveal){
 	}
 
 	// try to sync video with audio controls
-	function linkVideoAndAudioEvents( audioElement, videoElement ) {
+	function linkVideoToAudioControls( audioElement, videoElement ) {
 		videoElement.addEventListener( 'ended', function( event ) {
 			audioElement.currentTime = 0;
 			if ( autoplay ) audioElement.play();
@@ -331,7 +338,12 @@ const initAudioSlideshow = function(Reveal){
 		// default file cannot be read
 		if ( textToSpeechURL != null && text != null && text != "" ) {
 			var audioSource = document.createElement( 'source' );
-			audioSource.src = textToSpeechURL + encodeURIComponent(text);
+			if (textToSpeechURL.includes("[TEXT]")) {
+				audioSource.src = textToSpeechURL.replace("[TEXT]", encodeURIComponent(text));
+			}
+			else {
+				audioSource.src = textToSpeechURL + encodeURIComponent(text);
+			}
 			audioSource.setAttribute('data-tts',audioElement.id.split( '-' ).pop());
 			audioElement.appendChild(audioSource, audioElement.firstChild);
 		}
@@ -354,8 +366,18 @@ const initAudioSlideshow = function(Reveal){
 		audioElement.setAttribute( 'controls', '' );
 		audioElement.setAttribute( 'preload', 'none' );
 
+		audioElement.playbackRate = defaultPlaybackRate;
+
 		if ( videoElement ) {
-			linkVideoAndAudioEvents( audioElement, videoElement );
+			// connect play, pause, volumechange, mute, timeupdate events to video
+			if ( videoElement.duration ) {
+				linkVideoToAudioControls( audioElement, videoElement );
+			}
+			else {
+				videoElement.addEventListener('loadedmetadata', (event) => {
+					linkVideoToAudioControls( audioElement, videoElement );
+				});
+			}
 		}
 		audioElement.addEventListener( 'ended', function( event ) {
 			if ( typeof Recorder == 'undefined' || !Recorder.isRecording ) {
@@ -390,32 +412,25 @@ const initAudioSlideshow = function(Reveal){
 			evt.timestamp = 1000 * audioElement.currentTime;
 			document.dispatchEvent( evt );
 
-/*
-			// preload next audio element so that it is available after slide change
-			var indices = Reveal.getIndices();
-			if ( Reveal.availableFragments().next )
-				nextId = "audioplayer-" + indices.h + '.' + indices.v + '.' + (indices.f + 1);
-			else if ( Reveal.isVerticalSlide() && !Reveal.isLastVerticalSlide() )
-				nextId = "audioplayer-" + indices.h + '.' + (indices.v+1);
-			else
-				nextId = "audioplayer-" + (indices.h+1) + '.0';
+			// Make sure that the currentPlaybackRate is used, which
+			// might have been set by the user.
+			audioElement.playbackRate = currentPlaybackRate;
 
-			var nextAudio = document.getElementById( nextId );
-
-			if ( nextAudio ) {
-//console.debug( "Preload: " + nextAudio.id );
-				nextAudio.load();
-			}
-*/
+			if ( timer ) { clearTimeout( timer ); timer = null; }
 		} );
 		audioElement.addEventListener( 'pause', function( event ) {
+			if ( timer ) { clearTimeout( timer ); timer = null; }
 			document.dispatchEvent( new CustomEvent('stopplayback') );
 		} );
 		audioElement.addEventListener( 'seeked', function( event ) {
 			var evt = new CustomEvent('seekplayback');
 			evt.timestamp = 1000 * audioElement.currentTime;
 			document.dispatchEvent( evt );
+			if ( timer ) { clearTimeout( timer ); timer = null; }
 		} );
+		audioElement.addEventListener( 'ratechange', function( event ) {
+			currentPlaybackRate = audioElement.playbackRate;
+                } );
 
 		if ( audioFile != null ) {
 			// Support comma separated lists of audio sources
@@ -426,6 +441,7 @@ const initAudioSlideshow = function(Reveal){
 			} );
 		}
 		else if ( defaultAudios ) {
+			var audioExists = false;
 			try {
 				// check if audio file exists
 				var xhr = new XMLHttpRequest();
@@ -435,11 +451,12 @@ const initAudioSlideshow = function(Reveal){
 						var audioSource = document.createElement( 'source' );
 						audioSource.src = prefix + indices + suffix;
 						audioElement.insertBefore(audioSource, audioElement.firstChild);
+						audioExists = true;
 					}
 					else {
 						setupFallbackAudio( audioElement, text, videoElement );
 					}
-				}
+				};
 				xhr.send(null);
 			} catch( error ) {
 				// fallback if checking of audio file fails (e.g. when running the slideshow locally)
@@ -452,6 +469,10 @@ const initAudioSlideshow = function(Reveal){
 		if ( audioFile != null || defaultDuration > 0 ) {
 			container.appendChild( audioElement );
 		}
+	}
+
+	function getPlaybackRate() {
+		return currentPlaybackRate;
 	}
 };
 
