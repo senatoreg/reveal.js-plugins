@@ -15,11 +15,19 @@
 	font: inherit;
 	cursor: pointer;
 	outline: inherit;
-	z-index: 40;
+	opacity: 0.5;
+}
+
+.reveal.has-dark-background #customcontrols button {
+	color: #fff;
+}
+
+.reveal.has-light-background #customcontrols button {
+	color: #222;
 }
 
 #customcontrols button:hover {
-	color: var(--r-link-color-hover);
+	opacity: 1;
 }
 
 #customcontrols > div.customcontrols.container {
