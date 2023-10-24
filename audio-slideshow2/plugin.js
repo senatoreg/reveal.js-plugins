@@ -46,6 +46,8 @@ const initAudioSlideshow = function(Reveal){
 	var previousAudio = null;
 	var timer = null;
 
+	var audioContents = {};
+
 	Reveal.addEventListener( 'fragmentshown', function( event ) {
 		if ( timer ) { clearTimeout( timer ); timer = null; }
 //console.debug( "fragmentshown ");
@@ -272,6 +274,7 @@ const initAudioSlideshow = function(Reveal){
 
 		var textContainer =  document.createElement( 'div' );
 		var text = null;
+		var fragments;
 		if ( !slide.hasAttribute( 'data-audio-src' ) ) {
 			// determine text for TTS
 			if ( slide.hasAttribute( 'data-audio-text' ) ) {
@@ -286,8 +289,8 @@ const initAudioSlideshow = function(Reveal){
 			else if ( defaultText ) {
 				textContainer.innerHTML = slide.innerHTML;
 				// remove fragments
-				var fragments = textContainer.querySelectorAll( '.fragment' ) ;
-				for( var f = 0, len = fragments.length; f < len; f++ ) {
+				fragments = textContainer.querySelectorAll( '.fragment' ) ;
+				for( let f = 0, len = fragments.length; f < len; f++ ) {
 					textContainer.innerHTML = textContainer.innerHTML.replace(fragments[f].outerHTML,'');
 				}
 				text = getText( textContainer);
@@ -297,11 +300,10 @@ const initAudioSlideshow = function(Reveal){
 		}
 		setupAudioElement( container, h + '.' + v, slide.getAttribute( 'data-audio-src' ), text, null );
 		var i = 0;
-		var  fragments;
 		while ( (fragments = slide.querySelectorAll( '.fragment[data-fragment-index="' + i +'"]' )).length > 0 ) {
 			var audio = null;
-			var text = '';
-			for( var f = 0, len = fragments.length; f < len; f++ ) {
+			text = '';
+			for( let f = 0, len = fragments.length; f < len; f++ ) {
 				if ( !audio ) audio = fragments[ f ].getAttribute( 'data-audio-src' );
 				// determine text for TTS
 				if ( fragments[ f ].hasAttribute( 'data-audio-text' ) ) {
