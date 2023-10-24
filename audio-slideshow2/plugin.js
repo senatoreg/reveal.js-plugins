@@ -121,11 +121,11 @@ const initAudioSlideshow = function(Reveal){
 		var slide = Reveal.getCurrentSlide();
 		var indices = Reveal.getIndices();
 		var id = "audioplayer-" + indices.h + '.' + indices.v;
-		var selector = 'video.data-audio-content:not(.fragment)';
+		var selector = 'video.audio-content:not(.fragment)';
 		var video;
 		if ( indices.f !== undefined && indices.f > -1 ) {
 			id = id + '.' + indices.f;
-			selector = 'video.fragment.current-fragment.data-audio-content';
+			selector = 'video.fragment.current-fragment.audio-content';
 		}
 		previousAudio = currentAudio;
 		currentAudio = document.getElementById( id );
