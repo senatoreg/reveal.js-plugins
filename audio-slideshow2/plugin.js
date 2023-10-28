@@ -37,7 +37,6 @@ const initAudioSlideshow = function(Reveal){
 	var delay = 0; // start next slide after given time in milliseconds before audio has played, use negative value to not advance
 	var autoplay = false; // automatically start slideshow
 	var playerOpacity = .05; // opacity when the mouse is far from to the audioplayer
-	var startAtFragment = false; // when moving to a slide, start at the current fragment or at the start of the slide
 	var playerStyle = "position: fixed; bottom: 4px; left: 25%; width: 50%; height:75px; z-index: 33;"; // style used for container of audio controls
 	// ------------------
 
@@ -51,12 +50,14 @@ const initAudioSlideshow = function(Reveal){
 	Reveal.addEventListener( 'fragmentshown', function( event ) {
 		if ( timer ) { clearTimeout( timer ); timer = null; }
 //console.debug( "fragmentshown ");
+		hideAudio();
 		selectAudio();
 	} );
 
 	Reveal.addEventListener( 'fragmenthidden', function( event ) {
 		if ( timer ) { clearTimeout( timer ); timer = null; }
 //console.debug( "fragmenthidden ");
+		hideAudio();
 		selectAudio();
 	} );
 
@@ -68,14 +69,16 @@ const initAudioSlideshow = function(Reveal){
 
 	} );
 
+	Reveal.addEventListener( 'beforeslidechange', function( event ) {
+		if ( timer ) { clearTimeout( timer ); timer = null; }
+//console.debug( "slidechanged ");
+
+		hideAudio();
+	} );
+
 	Reveal.addEventListener( 'slidechanged', function( event ) {
 		if ( timer ) { clearTimeout( timer ); timer = null; }
 //console.debug( "slidechanged ");
-		var indices = Reveal.getIndices();
-		if ( !startAtFragment && typeof indices.f !== 'undefined' && indices.f >= 0) {
-			// hide fragments when slide is shown
-			Reveal.slide(indices.h, indices.v, -1);
-		}
 
 		selectAudio();
 	} );
@@ -112,20 +115,29 @@ const initAudioSlideshow = function(Reveal){
 		autoplay = !autoplay;
 	} );
 
-	function selectAudio() {
-		//var previousAudio;
+	function hideAudio() {
 		if ( currentAudio ) {
 			currentAudio.pause();
 			currentAudio.style.display = "none";
 		}
+	}
+
+	function getCurrentSlideMedia( slide ) {
+		var indices = Reveal.getIndices( slide );
+		var selector = 'video.audio-content:not(.fragment), audio.audio-content:not(.fragment)';
+		if ( indices.f !== undefined && indices.f > -1 ) {
+			selector = 'video.fragment.current-fragment.audio-content, audio.fragment.current-fragment.audio-content';
+		}
+		return queryAll( selector );
+	}
+
+	function selectAudio() {
+		//var previousAudio;
 		var slide = Reveal.getCurrentSlide();
 		var indices = Reveal.getIndices();
 		var id = "audioplayer-" + indices.h + '.' + indices.v;
-		var selector = 'video.audio-content:not(.fragment)';
-		var video;
 		if ( indices.f !== undefined && indices.f > -1 ) {
 			id = id + '.' + indices.f;
-			selector = 'video.fragment.current-fragment.audio-content';
 		}
 		previousAudio = currentAudio;
 		currentAudio = document.getElementById( id );
@@ -138,10 +150,11 @@ const initAudioSlideshow = function(Reveal){
 			}
 //console.debug( "Play " + currentAudio.id);
 			if ( !currentAudio.hasAttribute('data-audio-linked') ) {
-				video = queryAll( selector );
-				if ( video.length > 0 ) {
-					video.sort((a, b) => { return b.duration - a.duration; });
-					linkVideoToAudioControls(currentAudio, video[0]);
+				media = getCurrentSlideMedia();
+				if ( media.length > 0 ) {
+					media.forEach((e, i, a) => {
+						linkMediaToAudioControls(currentAudio, e);
+					});
 				}
 			}
 			if ( autoplay && !currentAudio.hasAttribute('data-audio-linked') ) {
@@ -194,8 +207,6 @@ const initAudioSlideshow = function(Reveal){
 		if ( 'ontouchstart' in window || navigator.msMaxTouchPoints ) {
 			opacity = 1;
 		}
-		if ( Reveal.getConfig().audio.startAtFragment ) startAtFragment = Reveal.getConfig().audio.startAtFragment;
-
 		// set style so that audio controls are shown on hover
 		var css='.audio-controls>audio { opacity:' + playerOpacity + ';} .audio-controls:hover>audio { opacity:1;}';
 		style=document.createElement( 'style' );
@@ -264,10 +275,10 @@ const initAudioSlideshow = function(Reveal){
 			// this is a work around that shouldn't be necessary
 
 			// create audio elements for slides with code fragments
-			setupAudioElement( container, h + '.' + v, slide.getAttribute( 'data-audio-src' ), '', null  );
+			setupAudioElement( container, h + '.' + v, slide.getAttribute( 'data-audio-src' ), '' );
 			fragments = slide.querySelectorAll( 'code.fragment' );
 			for ( i = 0; i < fragments.length; i++ ) {
-				setupAudioElement( container, h + '.' + v + '.' + i, null, '', null  );
+				setupAudioElement( container, h + '.' + v + '.' + i, null, '' );
 			}
 			return;
 		}
@@ -298,7 +309,7 @@ const initAudioSlideshow = function(Reveal){
 // alert( h + '.' + v + ": " + text );
 // console.log( h + '.' + v + ": " + text );
 		}
-		setupAudioElement( container, h + '.' + v, slide.getAttribute( 'data-audio-src' ), text, null );
+		setupAudioElement( container, h + '.' + v, slide.getAttribute( 'data-audio-src' ), text );
 		var i = 0;
 		while ( (fragments = slide.querySelectorAll( '.fragment[data-fragment-index="' + i +'"]' )).length > 0 ) {
 			var audio = null;
@@ -315,28 +326,34 @@ const initAudioSlideshow = function(Reveal){
 				}
 			}
 //console.log( h + '.' + v + '.' + i  + ": >" + text +"<")
-			setupAudioElement( container, h + '.' + v + '.' + i, audio, text, null  );
+			setupAudioElement( container, h + '.' + v + '.' + i, audio, text );
  			i++;
 		}
 	}
 
 	// try to sync video with audio controls
-	function linkVideoToAudioControls( audioElement, videoElement ) {
-		videoElement.addEventListener( 'ended', function( event ) {
+	function linkMediaToAudioControls( audioElement, mediaElement ) {
+		mediaElement.addEventListener( 'ended', function( event ) {
+			var media = getCurrentSlideMedia();
+			var ended = media.every((e, i, a) => {
+				return e.ended === true;
+			});
+			if (!ended)
+				return;
 			audioElement.currentTime = 0;
 			if ( autoplay ) audioElement.play();
 		} );
-		videoElement.addEventListener( 'play', function( event ) {
+		mediaElement.addEventListener( 'play', function( event ) {
 			audioElement.pause();
 		} );
 		audioElement.addEventListener( 'play', function( event ) {
-			videoElement.pause();
+			mediaElement.pause();
 			audioElement.currentTime = 0;
 		} );
 		audioElement.setAttribute( 'data-audio-linked', '');
 	}
 
-	function setupFallbackAudio( audioElement, text, videoElement ) {
+	function setupFallbackAudio( audioElement, text ) {
 		// default file cannot be read
 		if ( textToSpeechURL != null && text != null && text != "" ) {
 			var audioSource = document.createElement( 'source' );
@@ -360,7 +377,7 @@ const initAudioSlideshow = function(Reveal){
 		}
 	}
 
-	function setupAudioElement( container, indices, audioFile, text, videoElement ) {
+	function setupAudioElement( container, indices, audioFile, text ) {
 		var audioElement = document.createElement( 'audio' );
 		audioElement.setAttribute( 'style', "position: relative; top: 20px; left: 10%; width: 80%;" );
 		audioElement.id = "audioplayer-" + indices;
@@ -370,17 +387,6 @@ const initAudioSlideshow = function(Reveal){
 
 		audioElement.playbackRate = defaultPlaybackRate;
 
-		if ( videoElement ) {
-			// connect play, pause, volumechange, mute, timeupdate events to video
-			if ( videoElement.duration ) {
-				linkVideoToAudioControls( audioElement, videoElement );
-			}
-			else {
-				videoElement.addEventListener('loadedmetadata', (event) => {
-					linkVideoToAudioControls( audioElement, videoElement );
-				});
-			}
-		}
 		audioElement.addEventListener( 'ended', function( event ) {
 			if ( typeof Recorder == 'undefined' || !Recorder.isRecording ) {
 				// determine whether and when slideshow advances with next slide
@@ -456,7 +462,7 @@ const initAudioSlideshow = function(Reveal){
 						audioExists = true;
 					}
 					else {
-						setupFallbackAudio( audioElement, text, videoElement );
+						setupFallbackAudio( audioElement, text );
 					}
 				};
 				xhr.send(null);
@@ -465,7 +471,7 @@ const initAudioSlideshow = function(Reveal){
 				var audioSource = document.createElement( 'source' );
 				audioSource.src = prefix + indices + suffix;
 				audioElement.insertBefore(audioSource, audioElement.firstChild);
-				setupFallbackAudio( audioElement, text, videoElement );
+				setupFallbackAudio( audioElement, text );
 			}
 		}
 		if ( audioFile != null || defaultDuration > 0 ) {
