@@ -29,20 +29,11 @@ const initFitText = function(Reveal){
 	    size = Reveal.getComputedSlideSize(),
 	    maxHeight = size.height * scale;
 
-	const fittext = function( curSlide, selector ) {
-	    /*
-	    let curSlide = event.currentSlide,
-		prevSlide = event.previousSlide;
+	const fittext = function( slide, selector ) {
 
-	    prevSlide.querySelectorAll('blockquote').forEach(function(e, i) {
-		    //event.style.removeProperty('max-height');
-		    event.style.removeProperty('font-size');
-	    });
-	    */
-
-	    curSlide.querySelectorAll( selector ).forEach(function(e, i) {
+	    slide.querySelectorAll( selector ).forEach(function(e, i) {
 		let s = getComputedStyle(e);
-		    //padding = parseInt(s.paddingTop, 10) + parseInt(s.paddingBottom, 10);
+		//let padding = parseInt(s.paddingTop, 10) + parseInt(s.paddingBottom, 10);
 		//let client = parseInt(s.height, 10);
 
 		if (s.visibility !== 'visible' || s.display === 'none')
@@ -91,8 +82,8 @@ const initFitText = function(Reveal){
 	    });
 	};
 
-	const unfittext = function ( prevSlide, selector ) {
-	    prevSlide.querySelectorAll( selector ).forEach(function(e, i) {
+	const unfittext = function ( slide, selector ) {
+	    slide.querySelectorAll( selector ).forEach(function(e, i) {
 		if (e.hasAttribute(attr)) {
 		    e.style.setProperty('font-size', null);
 		    e.style.setProperty('line-height', null);
