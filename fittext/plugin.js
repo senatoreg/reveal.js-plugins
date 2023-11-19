@@ -100,15 +100,15 @@ const initFitText = function(Reveal){
 		fittext( Reveal.getCurrentSlide(), selectorFragment );
 	});
 
-	/*
 	Reveal.addEventListener('slidechanged', function( event ) {
 		fittext( event.currentSlide, selectorSlide );
 	});
-	*/
 
+	/*
 	Reveal.addEventListener('beforeslidechange', function( event ) {
 		fittext( Reveal.getSlide( event.indexh, event.indexv ), selectorSlide );
 	});
+	*/
 
 	Reveal.addEventListener('slidetransitionend', function( event ) {
 		unfittext( event.previousSlide, selectorSlideClean );
