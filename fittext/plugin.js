@@ -20,7 +20,7 @@ const initFitText = function(Reveal){
 
 	let config = Reveal.getConfig().fittext || {},
 	    elements = config.elements || [ 'blockquote' ],
-	    selectorSlide = elements.map(e => e + ':not([' + attr + '])').join(','),
+	    selectorSlide = elements.map(e => e + ':not(.fragment):not([' + attr + '])').join(','),
 	    selectorSlideClean = elements.map(e => e + '[' + attr + ']').join(','),
 	    selectorFragment = elements.map(e => e + '.fragment:not([' + attr + '])').join(','),
 	    selectorFragmentClean = elements.map(e => e + '.fragment[' + attr + ']').join(','),
