@@ -22,8 +22,8 @@ const initFitText = function(Reveal){
 	    elements = config.elements || [ 'blockquote' ],
 	    selectorSlide = elements.map(e => e + ':not(.fragment):not([' + attr + '])').join(','),
 	    selectorSlideClean = elements.map(e => e + '[' + attr + ']').join(','),
-	    selectorFragment = elements.map(e => e + '.fragment:not([' + attr + '])').join(','),
-	    selectorFragmentClean = elements.map(e => e + '.fragment[' + attr + ']').join(','),
+	    selectorFragment = elements.map(e => e + '.fragment.visible:not([' + attr + '])').join(','),
+	    selectorFragmentClean = elements.map(e => e + '.fragment.visible[' + attr + ']').join(','),
 	    scale = config.scale || .7,
 	    defaultPixelSize = parseFloat(window.getComputedStyle(document.body).fontSize),
 	    size = Reveal.getComputedSlideSize(),
@@ -36,7 +36,7 @@ const initFitText = function(Reveal){
 		//let padding = parseInt(s.paddingTop, 10) + parseInt(s.paddingBottom, 10);
 		//let client = parseInt(s.height, 10);
 
-		if (s.visibility !== 'visible' || s.display === 'none')
+		if (s.visibility === 'hidden' || s.display === 'none')
 		    return;
 
 		let outerHeight = maxHeight,
@@ -82,9 +82,12 @@ const initFitText = function(Reveal){
 	    });
 	};
 
-	const unfittext = function ( slide, selector ) {
+	const unfittext = function ( slide, selector, force ) {
 	    slide.querySelectorAll( selector ).forEach(function(e, i) {
 		if (e.hasAttribute(attr)) {
+		    let s = getComputedStyle(e);
+		    if ( !force && ( s.visibility !== 'hidden' || s.display !== 'none') )
+			return;
 		    e.style.setProperty('font-size', null);
 		    e.style.setProperty('line-height', null);
 		    e.removeAttribute(attr);
@@ -97,11 +100,15 @@ const initFitText = function(Reveal){
 	});
 
 	Reveal.addEventListener('fragmenthidden', function( event ) {
-		fittext( Reveal.getCurrentSlide(), selectorFragment );
+		unfittext( Reveal.getCurrentSlide(), selectorFragment, false );
 	});
 
 	Reveal.addEventListener('slidechanged', function( event ) {
 		fittext( event.currentSlide, selectorSlide );
+		let indices = Reveal.getIndices();
+		if ( indices.f > -1) {
+			fittext( Reveal.getCurrentSlide(), selectorFragment );
+		}
 	});
 
 	/*
@@ -111,7 +118,7 @@ const initFitText = function(Reveal){
 	*/
 
 	Reveal.addEventListener('slidetransitionend', function( event ) {
-		unfittext( event.previousSlide, selectorSlideClean );
+		unfittext( event.previousSlide, selectorSlideClean, true );
 	});
 
 	return this;
