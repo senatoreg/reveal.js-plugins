@@ -21,7 +21,9 @@ const initFitText = function(Reveal){
 	let config = Reveal.getConfig().fittext || {},
 	    elements = config.elements || [ 'blockquote' ],
 	    selectorSlide = elements.map(e => e + ':not([' + attr + '])').join(','),
+	    selectorSlideClean = elements.map(e => e + '[' + attr + ']').join(','),
 	    selectorFragment = elements.map(e => e + '.fragment:not([' + attr + '])').join(','),
+	    selectorFragmentClean = elements.map(e => e + '.fragment[' + attr + ']').join(','),
 	    scale = config.scale || .7,
 	    defaultPixelSize = parseFloat(window.getComputedStyle(document.body).fontSize),
 	    size = Reveal.getComputedSlideSize(),
@@ -89,6 +91,16 @@ const initFitText = function(Reveal){
 	    });
 	};
 
+	const unfittext = function ( prevSlide, selector ) {
+	    prevSlide.querySelectorAll( selector ).forEach(function(e, i) {
+		if (e.hasAttribute(attr)) {
+		    e.style.setProperty('font-size', null);
+		    e.style.setProperty('line-height', null);
+		    e.removeAttribute(attr);
+		}
+	    });
+	};
+
 	Reveal.addEventListener('fragmentshown', function( event ) {
 		fittext( Reveal.getCurrentSlide(), selectorFragment );
 	});
@@ -99,6 +111,10 @@ const initFitText = function(Reveal){
 
 	Reveal.addEventListener('slidechanged', function( event ) {
 		fittext( event.currentSlide, selectorSlide );
+	});
+
+	Reveal.addEventListener('slidetransitionend', function( event ) {
+		unfittext( event.previousSlide, selectorSlideClean );
 	});
 
 	return this;
