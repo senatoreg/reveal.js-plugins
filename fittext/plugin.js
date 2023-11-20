@@ -19,7 +19,7 @@ const initFitText = function(Reveal){
 	const attr = 'data-fittext-size';
 
 	let config = Reveal.getConfig().fittext || {},
-	    elements = config.elements || [ 'blockquote' ],
+	    elements = config.elements || [ 'blockquote', '.r-auto-fittext' ],
 	    selectorSlide = elements.map(e => e + ':not(.fragment):not([' + attr + '])').join(','),
 	    selectorSlideClean = elements.map(e => e + '[' + attr + ']').join(','),
 	    selectorFragment = elements.map(e => e + '.fragment.visible:not([' + attr + '])').join(','),
@@ -42,8 +42,7 @@ const initFitText = function(Reveal){
 		let outerHeight = maxHeight,
 		    outerWidth = parseInt(s.width, 10),
 		    fontSize = parseInt(s.fontSize, 10),
-		    lineHeight = parseInt(s.lineHeight, 10) / fontSize,
-		    pixelWidthRatio = defaultPixelSize / fontSize,
+		    lineHeight = parseInt(s.lineHeight, 10),
 		    textLength = e.innerText.length,
 		    innerHeight = 0;
 
@@ -58,26 +57,15 @@ const initFitText = function(Reveal){
 		});
 
 		if (outerHeight < innerHeight) {
-		    /*
-		      ratio is calculated starting from the ratio between the target bounding box size and
-		      the actual size of each character bounding box multiplied by number of characters.
-
-		      ratio formula elements:
-
-		      outerHeight * outerWidth -> the outermost element bounding box size in which the text will be fit in
-		      lineHeight * pixelWidthRatio -> actual size of a single character bounding box
-		      lineHeight * pixelWidthRatio * textLength -> actual size occupied by all character in the text whatever is the shape of bounding box
-		      */
-		    let ratio = Math.pow(outerHeight * outerWidth / ( (lineHeight * pixelWidthRatio) * textLength ), 1/2) / fontSize ;
+		    let ratio = outerHeight * outerWidth / ( lineHeight * textLength * defaultPixelSize );
 		    ratio = ratio.toPrecision(4);
 
-		    if (ratio > 1)
-			ratio = (1 / ratio).toPrecision(4);
+		    console.log('fittext', s.lineHeight, ratio, fontSize);
 
 		    e.setAttribute(attr, ratio);
 		    //e.style.setProperty('max-height', client + 'px');
 		    e.style.setProperty('font-size', ratio + 'em');
-		    e.style.setProperty('line-height', lineHeight + 'em');
+		    e.style.setProperty('line-height', lineHeight / fontSize + 'em');
 		}
 	    });
 	};
