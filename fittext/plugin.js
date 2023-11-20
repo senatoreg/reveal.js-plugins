@@ -24,7 +24,7 @@ const initFitText = function(Reveal){
 	    selectorSlideClean = elements.map(e => e + '[' + attr + ']').join(','),
 	    selectorFragment = elements.map(e => e + '.fragment.visible:not([' + attr + '])').join(','),
 	    selectorFragmentClean = elements.map(e => e + '.fragment.visible[' + attr + ']').join(','),
-	    scale = config.scale || .7,
+	    scale = config.scale || .8,
 	    defaultPixelSize = parseFloat(window.getComputedStyle(document.body).fontSize),
 	    size = Reveal.getComputedSlideSize(),
 	    maxHeight = size.height * scale;
@@ -33,39 +33,22 @@ const initFitText = function(Reveal){
 
 	    slide.querySelectorAll( selector ).forEach(function(e, i) {
 		let s = getComputedStyle(e);
-		//let padding = parseInt(s.paddingTop, 10) + parseInt(s.paddingBottom, 10);
-		//let client = parseInt(s.height, 10);
 
 		if (s.visibility === 'hidden' || s.display === 'none')
 		    return;
 
-		let outerHeight = maxHeight,
-		    outerWidth = parseInt(s.width, 10),
-		    fontSize = parseInt(s.fontSize, 10),
-		    lineHeight = parseInt(s.lineHeight, 10),
-		    textLength = e.innerText.length,
-		    innerHeight = 0;
+		let outerHeight = parseFloat(e.clientHeight, 10) - parseFloat(s.paddingTop, 10) - parseFloat(s.paddingBottom, 10),
+		    fontSize = parseFloat(s.fontSize, 10),
+		    lineHeight = parseFloat(s.lineHeight, 10),
+		    lineHeightRatio = lineHeight / fontSize;
 
-		e.querySelectorAll(e.tagName + ' > *').forEach(function(e0, i0) {
-		    let s0 = getComputedStyle(e0);
-
-		    innerHeight += parseInt(s0.height, 10);
-
-		    outerHeight -= (parseInt(s0.marginTop, 10) + parseInt(s0.marginBottom, 10));
-		    outerHeight -= (parseInt(s0.borderTopWidth, 10) + parseInt(s0.borderBottomWidth, 10));
-		    outerHeight -= (parseInt(s0.paddingTop, 10) + parseInt(s0.paddingBottom, 10));
-		});
-
-		if (outerHeight < innerHeight) {
-		    let ratio = outerHeight * outerWidth / ( lineHeight * textLength * defaultPixelSize );
-		    ratio = ratio.toPrecision(4);
-
-		    console.log('fittext', s.lineHeight, ratio, fontSize);
+		if (maxHeight < outerHeight) {
+		    let ratio = Math.pow(maxHeight / outerHeight, 0.5);
 
 		    e.setAttribute(attr, ratio);
 		    //e.style.setProperty('max-height', client + 'px');
 		    e.style.setProperty('font-size', ratio + 'em');
-		    e.style.setProperty('line-height', lineHeight / fontSize + 'em');
+		    e.style.setProperty('line-height', lineHeightRatio + 'em');
 		}
 	    });
 	};
