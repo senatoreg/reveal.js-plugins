@@ -175,7 +175,7 @@ const initAudioSlideshow = function(Reveal){
 	function setup() {
 		// wait for markdown and highlight plugin to be done
 		if (
-			document.querySelector( 'section[data-markdown]:not([data-markdown-parsed])' ) 
+			document.querySelector( 'section[data-markdown]:not([data-markdown-parsed])' )
 			|| document.querySelector( 'code[data-line-numbers*="|"]')
 		) {
 			setTimeout( setup, 100 );

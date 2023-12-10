@@ -49,12 +49,12 @@ const initAnything = function(Reveal){
          if ( typeof obj1[p] === 'object' && typeof obj2[p] === 'object' ) {
 					// merge properties if both are objects
 	        obj1[p] = mergeRecursive(obj1[p], obj2[p]);
-         } 
+         }
        }
        else {
 	      // Property does not yet exist in destination object; create and set its value.
 	      obj1[p] = obj2[p];
-       }		
+       }
 //console.warn(p, obj1[p], obj2[p]);
 	  }
 
@@ -83,7 +83,7 @@ const initAnything = function(Reveal){
 					}
 				}
 				initialize(elements[j], options);
-			} 
+			}
 		}
 	} );
 

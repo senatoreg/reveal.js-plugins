@@ -92,7 +92,7 @@ const initAnimate = function(Reveal){
 		animatedSVGs.push({ svg: SVG( container.querySelector('svg') ) });
 //console.log(animatedSVGs);
 		if ( !config ) return;
-		
+
 //		container.svg = SVG( container.querySelector('svg') );
 		// pre-animation setup
 		var setup = config.setup;
@@ -124,13 +124,13 @@ const initAnimate = function(Reveal){
 						if ( typeof setup[i].modifier === "function" ) {
 							// if modifier is function execute it
 							setup[i].modifier.apply(animatedSVGs[index].svg,setup[i].parameters);
-						} 
+						}
 						else {
 							// apply modifier to root
 							animatedSVGs[index].svg[setup[i].modifier].apply(animatedSVGs[index].svg,setup[i].parameters);
 						}
-					}				
-				} 
+					}
+				}
 				catch( error ) {
 					console.error("Error '" + error + "' setting up element " + JSON.stringify(setup[i]));
 				}
@@ -166,7 +166,7 @@ const initAnimate = function(Reveal){
 
 //console.log("Duration:", anim.duration());
 						timestamp = anim.duration();
-					} 
+					}
 					catch( error ) {
 						console.error("Error '" + error + "' setting up animation " + JSON.stringify(animations[fragment][i]));
 					}
@@ -240,7 +240,7 @@ const initAnimate = function(Reveal){
 		for (var i = 0; i < elements.length; i++ ){
 			const index = elements[i].getAttribute("data-animation-index");
 			if ( animatedSVGs[index].animation
-			     && animatedSVGs[index].animationSchedule[fragment] 
+			     && animatedSVGs[index].animationSchedule[fragment]
 			) {
 //console.log( animatedSVGs[index].animationSchedule[fragment].end, animatedSVGs[index].animation.time());
 				var timeout = animatedSVGs[index].animationSchedule[fragment].end - animatedSVGs[index].animation.time();
@@ -259,18 +259,18 @@ const initAnimate = function(Reveal){
 			const index = elements[i].getAttribute("data-animation-index");
 //console.log("Seek",timestamp,animatedSVGs[index].animationSchedule[fragment].begin + (timestamp || 0) );
 			if ( animatedSVGs[index].animation
-				   && animatedSVGs[index].animationSchedule[fragment] 
+				   && animatedSVGs[index].animationSchedule[fragment]
 			) {
 				animatedSVGs[index].animation.time( animatedSVGs[index].animationSchedule[fragment].begin + (timestamp || 0) );
 			}
 		}
-		if ( timer ) { 
+		if ( timer ) {
 			// update time if animation is running
 			autoPause();
 		}
 	}
 
-	
+
 	// Control animation
 	function animateSlide( timestamp ) {
 		if ( printMode ) return;
@@ -289,7 +289,7 @@ const initAnimate = function(Reveal){
 		}
 //console.log("Done");
 	}
-	
+
 /*****************************************************************
 ** Print
 ******************************************************************/
@@ -302,7 +302,7 @@ const initAnimate = function(Reveal){
 			var current = pages[i].querySelectorAll(".current-fragment");
 			for ( var j = 0; j < current.length; j++ ) {
 				if ( Number(current[j].getAttribute("data-fragment-index")) > fragment ) {
-					fragment = Number(current[j].getAttribute("data-fragment-index") );				
+					fragment = Number(current[j].getAttribute("data-fragment-index") );
 				}
 			}
 			fragment += 1;
@@ -321,9 +321,9 @@ const initAnimate = function(Reveal){
 				}
 
 				// set animation timestamp
-				if ( animatedSVGs[index].animation 
-				     && animatedSVGs[index].animationSchedule 
-				     && animatedSVGs[index].animationSchedule[fragment] 
+				if ( animatedSVGs[index].animation
+				     && animatedSVGs[index].animationSchedule
+				     && animatedSVGs[index].animationSchedule[fragment]
 				) {
 //console.log(i,fragment, elements[j].animationSchedule[fragment].begin);
 					animatedSVGs[index].animation.time( animatedSVGs[index].animationSchedule[fragment].end );
@@ -331,7 +331,7 @@ const initAnimate = function(Reveal){
 
 				// remove HTML comments to fix problems with printing in Chrome
 				elements[j].innerHTML = elements[j].innerHTML.replace(/<\!--.*?-->/g, "");
-			}			
+			}
 		}
 	}
 /*****************************************************************
@@ -352,7 +352,7 @@ const initAnimate = function(Reveal){
 //console.log('slidechanged',Reveal.getIndices());
 				animateSlide(0);
 			});
-	
+
 			Reveal.addEventListener( 'overviewshown', function( event ) {
 				// pause animation
 				pause();
@@ -420,9 +420,9 @@ console.log('resumed ');
 		animateSlide();
 	});
 
-	this.play = play; 
-	this.pause = pause; 
-	this.seek = seek; 
+	this.play = play;
+	this.pause = pause;
+	this.seek = seek;
 	return this;
 };
 

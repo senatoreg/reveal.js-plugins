@@ -178,7 +178,7 @@ const initQnA = function(Reveal){
 			}
 		}
 		else {
-			div.classList.add("closed");	
+			div.classList.add("closed");
 		}
 
 		return bubbleUp( document.querySelector('.qna > .questions').appendChild(div) );
@@ -235,7 +235,7 @@ const initQnA = function(Reveal){
 						createQuestion( message.content.question );
 						break;
 					}
-				
+
 //console.log("Update", questionElement.question, message.content.question);
 					// update existing question
 					if ( questionElement.question.open && !message.content.question.open ) {
@@ -246,9 +246,9 @@ const initQnA = function(Reveal){
 						for ( var i=0; i < elements.length; i++ ) {
 							elements[i].innerHTML = (counter == 0) ? '' : counter;
 						}
-	
+
 						// close question
-						questionElement.classList.add("closed");	
+						questionElement.classList.add("closed");
 
 						// update data
 						questionElement.question = message.content.question;

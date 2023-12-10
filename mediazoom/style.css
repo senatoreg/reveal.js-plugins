@@ -1,8 +1,5 @@
 div#mediazoom {
-    display: grid;
-    justify-items: center;
-    align-items: center;
-    position: relative; 
+    position: absolute;
     font-size: 0.4em;
     top: 5%;
     left: 5%;
@@ -10,12 +7,29 @@ div#mediazoom {
     height: 90%;
     transition: ease 1s opacity, ease 1s visibility, ease 1s transform;
     opacity: 0;
-    z-index: 45;
+    z-index: 10;
     background: rgba(0,0,0,0.75);
 }
 
-div#mediazoom * {
+div#mediazoom .mediazoom-content img,
+div#mediazoom .mediazoom-content video {
     grid-area: 1/1;
     width: 100%;
     height: 100%;
+}
+
+div#mediazoom div.mediazoom-content {
+    display: grid;
+    justify-items: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+}
+
+div#mediazoom div.mediazoom-controls {
+    position: absolute;
+    top: 2.5%;
+    right: 2.5%;
+    display: flex;
+    font-size: var(--r-main-font-size);
 }

@@ -4,7 +4,7 @@
 ** A plugin that adds footnote information
 **
 ** Version: 1.0.0
-** 
+**
 ** License: MIT license (see LICENSE.md)
 **
 ******************************************************************/
@@ -37,38 +37,79 @@ const initMediazoom = function(Reveal){
 		if (position.height) div.style.setProperty('height', position.left);
 	}
 
-	let img = document.createElement( 'img' );
-	div.appendChild(img);
-
-	let video = document.createElement( 'video' );
-	div.appendChild(video);
-
-	const togglevisibility = function(el) {
-		let opacity = el.style.opacity;
-		if (opacity > 0) {
-			el.style.opacity = 0;
-			el.style.visibility = 'hidden';
-		} else {
-			el.style.opacity = 1;
-			el.style.visibility = 'visible';
-		}
-	};
+	// Content container for IMG and VIDEO
+	let content = document.createElement( 'div' );
+	content.classList.add( 'mediazoom-content' );
+	div.appendChild(content);
 
 	const removemedia = function(el) {
-		let opacity = el.style.opacity;
-		if (opacity === 0) {
-			img.src = "";
-			video.src = "";
+		el.querySelectorAll( 'img, video' ).forEach((e, i) => {
+			e.remove();
+		});
+	};
+
+	const syncmedia = function(el, back) {
+		if (back) {
+			el.querySelectorAll( 'video' ).forEach((e, i) => {
+				let paused = e.paused;
+				e.pause();
+				console.log(e.externalSource);
+				e.externalSource.currentTime = e.currentTime;
+				/*
+				if (!paused) {
+					if (!e.externalSource.classList.contains('.fragment') ||
+					    e.externalSource.classList.contains('.current-fragment')) {
+						e.externalSource.play();
+					}
+				}
+				*/
+			});
+		} else {
+			el.querySelectorAll( 'video' ).forEach((e, i) => {
+				if (!e.getAttribute('data-mediazoom-paused')) {
+					e.play();
+				}
+			});
 		}
 	};
 
-	div.addEventListener('click', (event) => {
-		togglevisibility(div);
+	div.addEventListener('transitionend', (event) => {
+		if (div.style.visibility === 'hidden') {
+			syncmedia(div, true);
+			removemedia(div);
+		} else if (div.style.visibility === 'visible') {
+			syncmedia(div, false);
+		}
 	});
 
-	div.addEventListener('transitionend', (event) => {
-		removemedia(div);
+	// Controls container for close button
+	const forcevisibility = function(el, visible) {
+		if (visible) {
+			el.style.opacity = 1;
+			el.style.visibility = 'visible';
+		} else {
+			el.style.opacity = 0;
+			el.style.visibility = 'hidden';
+		}
+	};
+
+	const togglevisibility = function(el) {
+		let visible = el.style.opacity > 0;
+		console.log('tv', visible);
+		forcevisibility(el, !visible);
+	};
+
+	let controls = document.createElement( 'div' );
+	controls.classList.add( 'mediazoom-controls' );
+	div.appendChild(controls);
+
+	let close = document.createElement( 'span' );
+	close.classList.add( 'mdi' );
+	close.classList.add( 'mdi-close-box' );
+	close.addEventListener('click', (event) => {
+		togglevisibility(div);
 	});
+	controls.appendChild(close);
 
 	document.querySelectorAll('.reveal > div#mediazoom > *').forEach(el => { el.remove(); });
 	document.querySelectorAll('.reveal > div#mediazoom').forEach(el => { el.remove(); });
@@ -76,13 +117,34 @@ const initMediazoom = function(Reveal){
 	// document.querySelector('.reveal div.slides').appendChild( div );
 
 	const onclick = function(event) {
-		let source = event.target.src;
-		let tag = event.target.tagName;
-		console.log(event.target, tag, source);
-		if (tag === 'IMG') {
-			img.src = source;
-		} else if (tag === 'VIDEO') {
-			video.src = source;
+		let source = event.target,
+		    currentSlide = Reveal.getCurrentSlide();
+		// let fragment = currentSlide.getAttribute('data-fragment');
+		if (source.classList.contains('fragment') &&
+		    !source.classList.contains('current-fragment'))
+			return;
+
+		if (source.tagName === 'IMG') {
+			let img = document.createElement( 'img' );
+			img.src = source.src;
+			content.appendChild(img);
+		} else if (source.tagName === 'VIDEO') {
+			let paused = source.paused;
+			source.pause();
+			let video = document.createElement( 'video' );
+			video.externalSource = source;
+			video.setAttribute( 'controls', '' );
+			if (paused)
+				video.setAttribute( 'data-mediazoom-paused',  paused);
+
+			let currentSource = document.createElement( 'source' );
+			currentSource.src = source.currentSrc;
+			video.muted = source.muted;
+
+			video.append( currentSource );
+
+			video.currentTime = source.currentTime;
+			content.appendChild(video);
 		}
 
 		togglevisibility(div);
@@ -90,11 +152,19 @@ const initMediazoom = function(Reveal){
 
 	Reveal.addEventListener('ready', function( event ) {
 		Reveal.getSlides().forEach((e, i) => {
-			let media = e.querySelectorAll('img');
+			let media = e.querySelectorAll('img, video');
 			media.forEach((e0, i0) => {
 				e0.addEventListener('click', onclick);
 			});
 		});
+	});
+
+	Reveal.addEventListener('slidechanged', function( event ) {
+		forcevisibility(div, false);
+	});
+
+	Reveal.addEventListener('fragmentshown', function( event ) {
+		forcevisibility(div, false);
 	});
 
 	return this;

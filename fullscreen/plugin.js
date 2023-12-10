@@ -1,10 +1,10 @@
 /*****************************************************************
 ** Author: Asvin Goel, goel@telematique.eu
 **
-** A plugin allowing slides to use the full window size. 
+** A plugin allowing slides to use the full window size.
 **
 ** Version: 1.0.0
-** 
+**
 ** License: MIT license (see LICENSE.md)
 **
 ******************************************************************/

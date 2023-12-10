@@ -1,7 +1,7 @@
 /*****************************************************************
 ** Author: Asvin Goel, goel@telematique.eu
 **
-** A plugin for reveal.js adding instant polls within an 
+** A plugin for reveal.js adding instant polls within an
 ** online seminar.
 **
 ** Version: 0.1.1
@@ -37,7 +37,7 @@ const initPoll = function(Reveal){
 			var buttons = pollElements[i].querySelectorAll("button");
 			for (var j = 0; j < buttons.length; j++ ){
 				// initialize number of votes for button
-				votes[buttons[j].getAttribute('data-value')] = 0; 
+				votes[buttons[j].getAttribute('data-value')] = 0;
 
 				// make button clickable
 				buttons[j].addEventListener('click', function(evt){
@@ -52,7 +52,7 @@ const initPoll = function(Reveal){
 						siblings[i].disabled = true;
 					}
 					vote( poll.getAttribute('data-poll'), button.getAttribute('data-value') );
-					button.classList.add("selected"); 
+					button.classList.add("selected");
 					button.blur();
 				});
 			}
@@ -114,7 +114,7 @@ const initPoll = function(Reveal){
 
 				// update result charts
 				if ( RevealChart ) {
-					var charts = document.querySelectorAll('canvas[data-chart][data-poll="' + message.content.poll + '"]');	
+					var charts = document.querySelectorAll('canvas[data-chart][data-poll="' + message.content.poll + '"]');
 					var data = [];
 					for (var choice in message.content.votes) {
 						data.push(message.content.votes[choice]);

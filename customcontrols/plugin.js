@@ -4,7 +4,7 @@
 ** A plugin replacing the default controls by custom controls.
 **
 ** Version: 2.0.1
-** 
+**
 ** License: MIT license (see LICENSE.md)
 **
 ******************************************************************/

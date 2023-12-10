@@ -43,7 +43,7 @@ const initChart = function(Reveal){
 	      // Property in destination object set; update its value.
 	      if ( obj1[p] !== null && typeof obj1[p] === 'object' && typeof obj2[p] === 'object' ) {
 	        obj1[p] = mergeRecursive(obj1[p], obj2[p]);
-	      } 
+	      }
 	      else {
 	        obj1[p] = obj2[p];
 	      }
@@ -155,13 +155,13 @@ const initChart = function(Reveal){
 	function recreateChart(canvas) {
 		// clear data to redraw animation
 		var data = canvas.chart.data.datasets;
-		canvas.chart.data.datasets = []; 
+		canvas.chart.data.datasets = [];
 		canvas.chart.update();
 		canvas.style.visibility = "hidden";
-		setTimeout( function(canvas, data) { 
-			canvas.chart.data.datasets = data; 
-			canvas.style.visibility = "visible"; 
-			canvas.chart.update(); 
+		setTimeout( function(canvas, data) {
+			canvas.chart.data.datasets = data;
+			canvas.style.visibility = "visible";
+			canvas.chart.update();
 		}, 500, canvas, data); // wait for slide transition to re-add data and animation
 /*
 		var config = canvas.chart.config;

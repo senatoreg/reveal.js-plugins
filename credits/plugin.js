@@ -4,7 +4,7 @@
 ** A plugin that adds credits information
 **
 ** Version: 1.0.0
-** 
+**
 ** License: MIT license (see LICENSE.md)
 **
 ******************************************************************/
