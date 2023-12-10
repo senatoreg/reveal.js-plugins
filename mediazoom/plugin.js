@@ -53,7 +53,6 @@ const initMediazoom = function(Reveal){
 			el.querySelectorAll( 'video' ).forEach((e, i) => {
 				let paused = e.paused;
 				e.pause();
-				console.log(e.externalSource);
 				e.externalSource.currentTime = e.currentTime;
 				/*
 				if (!paused) {
@@ -95,7 +94,6 @@ const initMediazoom = function(Reveal){
 
 	const togglevisibility = function(el) {
 		let visible = el.style.opacity > 0;
-		console.log('tv', visible);
 		forcevisibility(el, !visible);
 	};
 
