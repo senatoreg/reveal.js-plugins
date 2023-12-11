@@ -43,7 +43,6 @@ const initMagnify = function(Reveal){
 	};
 
 	const setelem = function(e) {
-		console.log(viewport);
 		let rect = e.getBoundingClientRect(),
 		    scale = Math.min(viewport.size[0] * size / rect.width,
 				     viewport.size[1] * size / rect.height),
