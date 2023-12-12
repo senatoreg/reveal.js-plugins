@@ -17,7 +17,8 @@ window.RevealMagnify = window.RevealMagnify || {
 
 const initMagnify = function(Reveal){
 	let config = Reveal.getConfig().magnify || {},
-	    size = config.size || 0.9;
+	    size = config.size || 0.,
+	    z = config.z || 50;
 	let rScale = Reveal.getScale();
 
 	const viewportEval = function() {
@@ -83,7 +84,7 @@ const initMagnify = function(Reveal){
 		let magnified = e.classList.contains( 'magnified' );
 
 		if (magnified) {
-			e.style.setProperty('z-index', 50);
+			e.style.setProperty('z-index', 'var(--r-magnify-z-index, ' + z + ')');
 		}
 	};
 
