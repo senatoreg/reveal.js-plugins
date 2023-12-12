@@ -17,7 +17,7 @@ window.RevealMagnify = window.RevealMagnify || {
 
 const initMagnify = function(Reveal){
 	let config = Reveal.getConfig().magnify || {},
-	    size = config.size || 0.,
+	    size = config.size || 0.9,
 	    z = config.z || 50;
 	let rScale = Reveal.getScale();
 
