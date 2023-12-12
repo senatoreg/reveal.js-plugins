@@ -1,4 +1,5 @@
 .reveal .slides section .magnify {
+    position: relative;
     transition: var(--r-magnify-timing, ease) var(--r-magnify-duration, 1s) transform;
     transform-origin: center;
     height: 100%;
@@ -7,5 +8,4 @@
 
 .reveal .slides section .magnify.magnified {
     transform: translate(var(--r-magnify-x, 0), var(--r-magnify-y, 0)) scale(var(--r-magnify-scale, 1));
-    position: relative;
 }
