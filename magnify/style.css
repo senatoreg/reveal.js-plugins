@@ -6,6 +6,10 @@
     width: 100%;
 }
 
+.reveal .slides section .magnify:hover {
+    filter: brightness(125%);
+}
+
 .reveal .slides section .magnify.magnified {
     transform: translate(var(--r-magnify-x, 0), var(--r-magnify-y, 0)) scale(var(--r-magnify-scale, 1));
 }
