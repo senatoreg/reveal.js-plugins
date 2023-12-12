@@ -59,18 +59,46 @@ const initMagnify = function(Reveal){
 
 	const onclick = function(event) {
 		let e = event.currentTarget,
-		    magnify = e.classList.contains( 'magnify' ),
-		    magnified = e.classList.contains( 'magnified' );
+		    magnify = e.classList.contains( 'magnify' );
 
 		if (!magnify)
 			return;
 
-		if ( !magnified) {
+		let magnified = e.classList.contains( 'magnified' );
+
+		if (!magnified) {
 			setelem(e);
 		} else {
 			cleanelem(e);
 		}
+	};
 
+	const ontransitionstart = function(event) {
+		let e = event.currentTarget,
+		    magnify = e.classList.contains( 'magnify' );
+
+		if (!magnify)
+			return;
+
+		let magnified = e.classList.contains( 'magnified' );
+
+		if (magnified) {
+			e.style.setProperty('z-index', 50);
+		}
+	};
+
+	const ontransitionend = function(event) {
+		let e = event.currentTarget,
+		    magnify = e.classList.contains( 'magnify' );
+
+		if (!magnify)
+			return;
+
+		let magnified = e.classList.contains( 'magnified' );
+
+		if (!magnified) {
+			e.style.setProperty('z-index', null);
+		}
 	};
 
 	Reveal.addEventListener('ready', function( event ) {
@@ -80,6 +108,8 @@ const initMagnify = function(Reveal){
 			let els = e.querySelectorAll('.magnify');
 			els.forEach((e0, i0) => {
 				e0.addEventListener('click', onclick);
+				e0.addEventListener('transitionstart', ontransitionstart);
+				e0.addEventListener('transitionend', ontransitionend);
 			});
 		});
 	});

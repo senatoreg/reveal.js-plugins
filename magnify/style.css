@@ -7,6 +7,5 @@
 
 .reveal .slides section .magnify.magnified {
     transform: translate(var(--r-magnify-x, 0), var(--r-magnify-y, 0)) scale(var(--r-magnify-scale, 1));
-    z-index: 50;
     position: relative;
 }
