@@ -4,12 +4,42 @@
     transform-origin: center;
     height: 100%;
     width: 100%;
+    cursor: zoom-in;
 }
 
-.reveal .slides section .magnify:hover {
-    filter: brightness(125%);
+.reveal .slides section .magnify.magnified:hover::after {
+    content: "Click to reset";
+    font-weight: bold;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: grid;
+    justify-content: center;
+    align-content: center;
+    color: #fff;
+}
+
+.reveal .slides section .magnify:not(.magnified):hover::after {
+    content: "Click to enlarge";
+    font-weight: bold;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: grid;
+    justify-content: center;
+    align-content: center;
+    color: #fff;
+}
+
+.reveal .slides section .magnify:hover > * {
+    filter: brightness(50%);
 }
 
 .reveal .slides section .magnify.magnified {
     transform: translate(var(--r-magnify-x, 0), var(--r-magnify-y, 0)) scale(var(--r-magnify-scale, 1));
+    cursor: zoom-out;
 }
