@@ -24,15 +24,16 @@ const initFitText = function(Reveal){
 	    selectorSlideClean = elements.map(e => e + '[' + attr + ']').join(','),
 	    selectorFragment = elements.map(e => e + '.fragment.visible:not([' + attr + '])').join(','),
 	    selectorFragmentClean = elements.map(e => e + '.fragment.visible[' + attr + ']').join(','),
-	    scale = config.scale || .8,
+	    defaultScale = config.scale || .8,
 	    defaultPixelSize = parseFloat(window.getComputedStyle(document.body).fontSize),
-	    size = Reveal.getComputedSlideSize(),
-	    maxHeight = size.height * scale;
+	    size = Reveal.getComputedSlideSize();
 
 	const fittext = function( slide, selector ) {
 
 	    slide.querySelectorAll( selector ).forEach(function(e, i) {
 		let s = getComputedStyle(e);
+		    scale = e.getAttribute('data-fittext-scale') || defaultScale,
+		    maxHeight = size.height * scale;
 
 		if (s.visibility === 'hidden' || s.display === 'none')
 		    return;
