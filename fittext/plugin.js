@@ -20,10 +20,8 @@ const initFitText = function(Reveal){
 
 	let config = Reveal.getConfig().fittext || {},
 	    elements = config.elements || [ 'blockquote', '.r-auto-fittext' ],
-	    selectorSlide = elements.map(e => e + ':not(.fragment):not([' + attr + '])').join(','),
+	    selectorSlide = elements.map(e => e + ':not([' + attr + '])').join(','),
 	    selectorSlideClean = elements.map(e => e + '[' + attr + ']').join(','),
-	    selectorFragment = elements.map(e => e + '.fragment.visible:not([' + attr + '])').join(','),
-	    selectorFragmentClean = elements.map(e => e + '.fragment.visible[' + attr + ']').join(','),
 	    defaultScale = config.scale || .8,
 	    defaultPixelSize = parseFloat(window.getComputedStyle(document.body).fontSize),
 	    size = Reveal.getComputedSlideSize();
@@ -35,7 +33,8 @@ const initFitText = function(Reveal){
 			    scale = e.getAttribute('data-fittext-scale') || defaultScale,
 			    maxHeight = size.height * scale;
 
-			if (s.visibility === 'hidden' || s.display === 'none')
+			console.log(e, s.visibility, s.display);
+			if (s.display === 'none')
 				return;
 
 			let outerHeight = parseFloat(e.clientHeight, 10) - parseFloat(s.paddingTop, 10) - parseFloat(s.paddingBottom, 10),
@@ -67,20 +66,8 @@ const initFitText = function(Reveal){
 		});
 	};
 
-	Reveal.addEventListener('fragmentshown', function( event ) {
-		fittext( Reveal.getCurrentSlide(), selectorFragment );
-	});
-
-	Reveal.addEventListener('fragmenthidden', function( event ) {
-		unfittext( Reveal.getCurrentSlide(), selectorFragment, false );
-	});
-
 	Reveal.addEventListener('slidechanged', function( event ) {
 		fittext( event.currentSlide, selectorSlide );
-		let indices = Reveal.getIndices();
-		if ( indices.f > -1) {
-			fittext( Reveal.getCurrentSlide(), selectorFragment );
-		}
 	});
 
 	/*
