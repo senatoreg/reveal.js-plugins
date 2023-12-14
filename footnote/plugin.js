@@ -62,7 +62,7 @@ const initFootnote = function(Reveal){
 		let slidefootnote = [];
 		let color;
 
-		color = getComputedStyle(currentSlide).color;
+		color = window.getComputedStyle(currentSlide).color;
 		currentSlide.querySelectorAll('span[data-footnote]')
 			.forEach(function(el) {
 				let c;
