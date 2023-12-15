@@ -80,11 +80,12 @@ const initFootnote = function(Reveal){
 
 					if (idx < 0) {
 						slidefootnote.push(footnote);
-						c.push( slidefootnote.length );
+						let newIdx = slidefootnote.length;
+						c.push( newIdx );
 
 						let li = document.createElement('li');
 						let text = document.createTextNode( footnote );
-						li.style.setProperty('--r-footnote-ref', "'" + c + "'");
+						li.style.setProperty('--r-footnote-ref', "'" + newIdx + "'");
 						li.style.setProperty('color', color);
 						li.appendChild(text);
 						ul.appendChild(li);
