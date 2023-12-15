@@ -33,7 +33,6 @@ const initFitText = function(Reveal){
 			    scale = e.getAttribute('data-fittext-scale') || defaultScale,
 			    maxHeight = size.height * scale;
 
-			console.log(e, s.visibility, s.display);
 			if (s.display === 'none')
 				return;
 
