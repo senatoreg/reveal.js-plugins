@@ -20,6 +20,7 @@ const initFootnote = function(Reveal){
 	    size = Reveal.getComputedSlideSize(),
 	    opacity = config.opacity,
 	    position = config.position,
+	    separator = config.separator || ';',
 	    transform = config.transform || 'translate(-50%, 0)',
 	    filter = config.filter,
 	    color = config.color;
@@ -65,37 +66,40 @@ const initFootnote = function(Reveal){
 		color = window.getComputedStyle(currentSlide).color;
 		currentSlide.querySelectorAll('span[data-footnote]')
 			.forEach(function(el) {
-				let c;
-				let footnote = el.getAttribute('data-footnote');
-
-				let idx = slidefootnote.indexOf(footnote);
+				let c = [];
+				let footnotes = el.getAttribute('data-footnote');
 
 				let ref = document.createElement('span');
 				ref.classList.add('footnote');
 				ref.style.setProperty('font-size', '0.5em');
 				ref.style.setProperty('vertical-align', 'super');
 
-				if (idx < 0) {
-					slidefootnote.push(footnote);
-					c = slidefootnote.length;
+				footnotes.split( separator ).forEach((footnote) => {
+					console.log(footnotes, footnote);
+					let idx = slidefootnote.indexOf(footnote);
 
-					let li = document.createElement('li');
-					let text = document.createTextNode( footnote );
-					li.style.setProperty('--r-footnote-ref', "'" + c + "'");
-					li.style.setProperty('color', color);
-					li.appendChild(text);
-					ul.appendChild(li);
-				} else {
-					c = idx + 1;
-				}
+					if (idx < 0) {
+						slidefootnote.push(footnote);
+						c.push( slidefootnote.length );
 
-				let marker = document.createTextNode( c );
+						let li = document.createElement('li');
+						let text = document.createTextNode( footnote );
+						li.style.setProperty('--r-footnote-ref', "'" + c + "'");
+						li.style.setProperty('color', color);
+						li.appendChild(text);
+						ul.appendChild(li);
+					} else {
+						c.push( idx + 1 );
+					}
+				});
+
+				let marker = document.createTextNode( c.join(",") );
 				ref.appendChild(marker);
 				el.appendChild(ref);
 		});
 
 		slidefootnote.length = 0;
-		sludefootnote = undefined;
+		slidefootnote = undefined;
 	});
 
 	Reveal.addEventListener('overviewshown', function( event ) {
