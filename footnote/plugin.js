@@ -54,7 +54,9 @@ const initFootnote = function(Reveal){
 	// document.querySelector('.reveal div.slides').appendChild( div );
 
 	Reveal.addEventListener('slidechanged', function( event ) {
-		event.previousSlide.querySelectorAll('span.footnote').forEach(el => { el.remove(); });
+		if (event.previousSlide !== undefined) {
+			event.previousSlide.querySelectorAll('span.footnote').forEach(el => { el.remove(); });
+		}
 		// document.querySelectorAll('.reveal > div#footnote > ul > *').forEach(el => { el.remove(); });
 		ul.querySelectorAll('*').forEach(el => { el.remove(); });
 		// document.querySelectorAll('.reveal div.slides > div#footnote > ul > *').forEach(el => { el.remove(); });

@@ -121,7 +121,9 @@ const initMagnify = function(Reveal){
 	});
 
 	Reveal.addEventListener('slidechanged', function( event ) {
-		cleanslide(event.previousSlide);
+		if (event.previousSlide !== undefined) {
+			cleanslide(event.previousSlide);
+		}
 	});
 
 	Reveal.addEventListener('fragmentshown', function( event ) {
