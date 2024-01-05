@@ -425,6 +425,7 @@ const initChalkboard = function ( Reveal ) {
 		var container = document.createElement( 'div' );
 		container.id = drawingCanvas[ id ].id;
 		container.classList.add( 'overlay' );
+		container.style.backdropFilter = 'revert';
 		container.setAttribute( 'data-prevent-swipe', 'true' );
 		container.oncontextmenu = function () {
 			return false;
